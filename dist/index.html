@@ -1,14 +1,20 @@
 <!DOCTYPE html>
+
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Asteroids Demo</title>
-    <script src="keymaster.js"></script>
-    <script src="main.js"></script>
-</head>
-<body>
-    <canvas id = "game-canvas"></canvas>
-</body>
+
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Missle Command Demo</title>
+        <link rel="stylesheet" href="reset.css">
+        <script src="keymaster.js"></script>
+        <script src="main.js"></script>
+    </head>
+
+    <body>
+        <!-- <h1>Missle Command</h1> -->
+        <canvas style ='cursor: none' id = "game-canvas" onmousemove = "window.game.cursor.pos = [event.clientX, event.clientY]" onmousedown = "window.game.cursor.fire()" ></canvas>
+    </body>
+    
 </html>

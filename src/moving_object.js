@@ -1,3 +1,5 @@
+const Explosion = require("./explosion.js");
+
 const MovingObject = function (options){
     this.pos = options.pos;
     this.vel = options.vel;
@@ -7,7 +9,6 @@ const MovingObject = function (options){
 }
 
 MovingObject.prototype.draw = function (ctx){
-    // this.ctx = ctx;
     ctx.beginPath();
     ctx.arc(this.pos[0], this.pos[1], this.radius, 0, 2*Math.PI);
     ctx.stokeStyle = "white";
@@ -15,12 +16,10 @@ MovingObject.prototype.draw = function (ctx){
     ctx.stroke();
     ctx.fillStyle = this.color;
     ctx.fill();
-    // ctx.endPath();
 }
 
 MovingObject.prototype.move = function (){
     this.pos = [this.pos[0] + this.vel[0], this.pos[1] + this.vel[1]];
-    this.pos = this.game.wrap(this.pos);
 }
 
 MovingObject.prototype.distanceFrom = function (pos){
@@ -38,8 +37,7 @@ MovingObject.prototype.isCollidedWith = function (otherObject){
 
 MovingObject.prototype.collideWith = function (){};
 
-
-
+MovingObject.prototype.destroy = function (){this.game.remove(this)};
 
 
 module.exports = MovingObject;

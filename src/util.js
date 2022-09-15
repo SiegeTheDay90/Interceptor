@@ -10,9 +10,9 @@ const Util = {
     },
     
     // Return a randomly oriented vector with the given length.
-    randomVec: function randomVec(length) {
-        const deg = 2 * Math.PI * Math.random();
-        return Util.scale([Math.sin(deg), Math.cos(deg)], length);
+    randomFallingVec: function randomFallingVec(length) {
+        const deg = Math.PI * (1/4)+ Math.PI * 0.5 * Math.random();
+        return Util.scale([Math.cos(deg), Math.sin(deg)], length);
     },
 
     // Scale the length of a vector by the given amount.

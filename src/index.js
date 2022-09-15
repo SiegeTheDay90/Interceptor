@@ -9,7 +9,10 @@ addEventListener("DOMContentLoaded", () => {
     canvasEl.height = 500;
     let ctx = canvasEl.getContext('2d');
 
-    game = new Game(ctx);
+    window.game = new Game(ctx);
+
+    setInterval(window.game.step.bind(game), 25);
+
     // gameView = new GameView(game, ctx);
     // gameView.start();
 
