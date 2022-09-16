@@ -3,7 +3,7 @@ const Explosion = require("./explosion.js");
 
 const Util = require("./util.js");
 
-const Missile = function(options){
+const Enemy = function(options){
 
     this.pos = options.pos;
     this.type = "enemy";
@@ -14,19 +14,15 @@ const Missile = function(options){
     
     
 }
-Util.inherits(Missile, MovingObject);
+Util.inherits(Enemy, MovingObject);
 
-Missile.prototype.move = function (){
-    this.pos = [this.pos[0] + this.vel[0], this.pos[1] + this.vel[1]];
-}
-
-Missile.prototype.collideWith = function (object){
+Enemy.prototype.collideWith = function (object){
     if(object.type === "explosion"){
         this.destroy();
     }
 };
 
-Missile.prototype.destroy = function(){
+Enemy.prototype.destroy = function(){
     this.game.remove(this);
     this.game.explosions.push(new Explosion({game: this.game, pos: this.pos}));
 }
@@ -34,4 +30,4 @@ Missile.prototype.destroy = function(){
 
 
 
-module.exports = Missile;
+module.exports = Enemy;

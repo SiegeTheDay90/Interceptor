@@ -38,8 +38,8 @@ Bullet.prototype.draw = function (ctx){
     ctx.fill();
 }
 
-Bullet.prototype.move = function (){
-    this.pos = [this.pos[0] + this.vel[0], this.pos[1] + this.vel[1]];
+Bullet.prototype.move = function (delta){
+    this.pos = [this.pos[0] + this.vel[0]*delta, this.pos[1] + this.vel[1]*delta];
 
     if (Math.abs(this.pos[0] - this.terminus[0]) < 5 && Math.abs(this.pos[1] - this.terminus[1] < 5)){
         this.destroy();

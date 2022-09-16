@@ -16,12 +16,12 @@ Explosion.prototype.draw = function (ctx){
 }
 
 
-Explosion.prototype.expand = function (){
-    if (this.radius === 26){
+Explosion.prototype.expand = function (delta){
+    if (this.radius >= 26){
         this.destroy();
     }
-    
-    this.radius += .75;
+    debugger;
+    this.radius += .75*delta;
 }
 
 Explosion.prototype.move = Explosion.prototype.expand; //allows the rest of the game to call 'move' as an alias for 'expand'

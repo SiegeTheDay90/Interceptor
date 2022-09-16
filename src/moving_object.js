@@ -18,8 +18,8 @@ MovingObject.prototype.draw = function (ctx){
     ctx.fill();
 }
 
-MovingObject.prototype.move = function (){
-    this.pos = [this.pos[0] + this.vel[0], this.pos[1] + this.vel[1]];
+MovingObject.prototype.move = function (timeDelta){
+    this.pos = [this.pos[0] + this.vel[0]*timeDelta, this.pos[1] + this.vel[1]*timeDelta];
 }
 
 MovingObject.prototype.distanceFrom = function (pos){

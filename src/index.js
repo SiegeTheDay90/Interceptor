@@ -1,6 +1,6 @@
 addEventListener("DOMContentLoaded", () => {
     const Game = require("./game.js");
-    // const GameView = require("./game_view.js");
+    const GameView = require("./game_view.js");
 
 
     
@@ -11,9 +11,7 @@ addEventListener("DOMContentLoaded", () => {
 
     window.game = new Game(ctx);
 
-    setInterval(window.game.step.bind(game), 25);
-
-    // gameView = new GameView(game, ctx);
-    // gameView.start();
+    gameView = new GameView(window.game, ctx);
+    gameView.start();
 
 })
