@@ -4,6 +4,7 @@ const Bullet = require("./bullet.js");
 const Cursor = function(options){
     this.pos = [100, 100];
     this.game = options.game;
+    this.canFire = true;
 }
 
 Cursor.prototype.draw = function(ctx){
@@ -21,7 +22,11 @@ Cursor.prototype.draw = function(ctx){
 }
 
 Cursor.prototype.fire = function(){
-    this.game.bullets.push(new Bullet({game: this.game}));
+    if(this.canFire && this.pos[1] < 395){
+        this.game.bullets.push(new Bullet({game: this.game}));
+        this.canFire = false;
+        setTimeout(() => {this.canFire = true}, 750);
+    }
 }
 
 //How do I bind this event?

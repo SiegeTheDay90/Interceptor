@@ -7,14 +7,63 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Missle Command Demo</title>
-        <link rel="stylesheet" href="reset.css">
+        <!-- <link rel="stylesheet" href="reset.css"> -->
+        <link rel="stylesheet" href="./styles/index.css">
         <script src="keymaster.js"></script>
         <script src="main.js"></script>
     </head>
 
-    <body>
-        <!-- <h1>Missle Command</h1> -->
-        <canvas style ='cursor: none' id = "game-canvas" onmousemove = "window.game.cursor.pos = [event.clientX, event.clientY]" onmousedown = "window.game.cursor.fire()" ></canvas>
-    </body>
+    <header class="header">
+        <img class="header-logo" src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a0/United_States_Army_Space_and_Missile_Defense_Command_Logo.svg/1200px-United_States_Army_Space_and_Missile_Defense_Command_Logo.svg.png" alt="This Logo." height="150" width="150">
+        <h1><i>Interceptor</i>🎯</h1>
+        <span class="contact-list">
+            <span class = "contact-link">Contact</span> | <span class = "contact-link">Logos</span> | <span class = "contact-link">Here</span>
+        </span>
+
+    </header>
+
+<body>
+    <div id='game-container'>
+        <div class='game-hud'>
+            <span id='score' class='hud-element'>Score: 99999</span>
+            <div id='hud-spacer'>&nbsp;</div>
+            <span id='lives' class='hud-element'>Lives: 🚀🚀🚀</span>
+        </div>
+
+        <section class='settings'>
+            <h3>Settings</h3>
+            <div class='settings-controls'>
+                <h4>Control Type</h4>
+                <form action="" method="" id='control-type'>
+                    <label><input type="radio" name="control_type" checked>Mouse</label><br>
+                    <label><input type="radio" name="control_type">Keyboard</label>
+                </form>
+            </div>
+            <div class='settings-speed'>
+                <h4>Game Speed</h4>
+                <figure id = "speedometer">►►►</figure>
+                <form action="" method="" id='game-speed'>
+                    <input class="speed-button" type="button" value="Slower"><br>
+                    <input class="speed-button" type="button" value="Faster">
+                </form>
+            </div>
+            <div class='settings-display'>
+                <h4>Display Mode</h4>
+                <form action="" method="" id='display-mode'>
+                    <input class="display-button" type="button" value="Dark" disabled = "true"><br>
+                    <input class="display-button" type="button" value="Light">
+                </form>
+            </div>
+        </section>
+
+        <canvas style ='cursor: none' id = "game-canvas"></canvas>&nbsp;
+        <!-- <canvas style ='cursor: none' id = "game-canvas" onmousemove = "game.cursor.pos = [event.clientX - getBoundingClientRect().left, event.clientY - getBoundingClientRect().top]" onmousedown = "window.game.cursor.fire()" ></canvas> -->
+        
+        
+        <section class='high-scores'>
+            High Scores
+        </section>
+    </div>
+</body>
     
 </html>

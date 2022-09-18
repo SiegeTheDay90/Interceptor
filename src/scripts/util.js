@@ -1,9 +1,6 @@
 const Util = {
     inherits: function inherits(childClass, parentClass){
-        const Surrogate = function(){};
-
-        // surr = new Surrogate();
-        
+        const Surrogate = function(){};        
         Surrogate.prototype = parentClass.prototype;
         childClass.prototype = new Surrogate();
         childClass.prototype.constructor = childClass;
@@ -15,9 +12,19 @@ const Util = {
         return Util.scale([Math.cos(deg), Math.sin(deg)], length);
     },
 
+
+
     // Scale the length of a vector by the given amount.
     scale: function scale(vec, m) {
         return [vec[0] * m, vec[1] * m];
+    },
+
+    spawn: function spawn(type){
+        type = type || "enemy";
+        
+        if (type === "enemy"){
+            return [Math.floor(Math.random()*771-10), Math.floor(Math.random()*150-100)]
+        }
     }
     
   };

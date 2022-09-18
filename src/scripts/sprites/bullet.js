@@ -1,11 +1,11 @@
 const MovingObject = require("./moving_object.js");
 const Explosion = require("./explosion.js");
-const Util = require("./util.js");
+const Util = require("../util.js");
 
 const Bullet = function(options){
 
     //Position matches parent tower, must be dynamic to support multiple towers
-    this.pos = [350, 400];
+    this.pos = [375, 400];
     this.radius = 1.5;
     
 
@@ -19,7 +19,7 @@ const Bullet = function(options){
     this.terminus = cursorPos;
 
     //Used for moving and drawing
-    let movefix = diffs[0] < 0 ? -4 : 4;
+    let movefix = diffs[0] < 0 ? -8 : 8;
     this.vel = [movefix * Math.cos(this.angle), movefix * Math.sin(this.angle)];
     this.colors = ["#ff8800", "#ff0000","#ff0000", "#ff0000"];
     this.type = "bullet";

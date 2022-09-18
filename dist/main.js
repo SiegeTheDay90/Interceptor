@@ -9,93 +9,123 @@
 /******/ (() => { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
-/***/ "./src/bullet.js":
-/*!***********************!*\
-  !*** ./src/bullet.js ***!
-  \***********************/
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
-
-eval("const MovingObject = __webpack_require__(/*! ./moving_object.js */ \"./src/moving_object.js\");\r\nconst Explosion = __webpack_require__(/*! ./explosion.js */ \"./src/explosion.js\");\r\nconst Util = __webpack_require__(/*! ./util.js */ \"./src/util.js\");\r\n\r\nconst Bullet = function(options){\r\n\r\n    //Position matches parent tower, must be dynamic to support multiple towers\r\n    this.pos = [350, 400];\r\n    this.radius = 1.5;\r\n    \r\n\r\n    //Provides access to other elements of the game\r\n    this.game = options.game;\r\n    \r\n    //Calculate angle from tower to cursor # # # # # # # # # # # # # # # #\r\n    let cursorPos = this.game.cursor.pos;\r\n    let diffs = [cursorPos[0] - this.pos[0], cursorPos[1] - this.pos[1]];\r\n    this.angle = [Math.atan(diffs[1]/diffs[0])];\r\n    this.terminus = cursorPos;\r\n\r\n    //Used for moving and drawing\r\n    let movefix = diffs[0] < 0 ? -4 : 4;\r\n    this.vel = [movefix * Math.cos(this.angle), movefix * Math.sin(this.angle)];\r\n    this.colors = [\"#ff8800\", \"#ff0000\",\"#ff0000\", \"#ff0000\"];\r\n    this.type = \"bullet\";\r\n\r\n}\r\n\r\nUtil.inherits(Bullet, MovingObject);\r\n\r\nBullet.prototype.draw = function (ctx){\r\n    ctx.beginPath();\r\n    ctx.arc(this.pos[0], this.pos[1], this.radius, 0, 2*Math.PI);\r\n    \r\n    //Random color each frame to give clicker effect\r\n    ctx.strokeStyle = this.colors[Math.floor(Math.random()*3)];\r\n    ctx.fillStyle = this.colors[Math.floor(Math.random()*3)];\r\n    ctx.fill();\r\n}\r\n\r\nBullet.prototype.move = function (delta){\r\n    this.pos = [this.pos[0] + this.vel[0]*delta, this.pos[1] + this.vel[1]*delta];\r\n\r\n    if (Math.abs(this.pos[0] - this.terminus[0]) < 5 && Math.abs(this.pos[1] - this.terminus[1] < 5)){\r\n        this.destroy();\r\n        this.game.explosions.push(new Explosion({pos: this.pos, game: this.game}));\r\n    }\r\n}\r\n\r\nmodule.exports = Bullet;\n\n//# sourceURL=webpack:///./src/bullet.js?");
-
-/***/ }),
-
-/***/ "./src/cursor.js":
-/*!***********************!*\
-  !*** ./src/cursor.js ***!
-  \***********************/
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
-
-eval("const Bullet = __webpack_require__(/*! ./bullet.js */ \"./src/bullet.js\");\r\n\r\n\r\nconst Cursor = function(options){\r\n    this.pos = [100, 100];\r\n    this.game = options.game;\r\n}\r\n\r\nCursor.prototype.draw = function(ctx){\r\n    ctx.beginPath();\r\n    ctx.arc(this.pos[0], this.pos[1], 1, 0, 2*Math.PI);\r\n    ctx.strokeStyle = \"red\";\r\n    ctx.lineWidth = 1;\r\n    ctx.stroke();\r\n\r\n    ctx.beginPath();\r\n    ctx.arc(this.pos[0], this.pos[1], 7, 0, 2*Math.PI);\r\n    ctx.strokeStyle = \"#09ff00\";\r\n    ctx.lineWidth = 1;\r\n    ctx.stroke();\r\n}\r\n\r\nCursor.prototype.fire = function(){\r\n    this.game.bullets.push(new Bullet({game: this.game}));\r\n}\r\n\r\n//How do I bind this event?\r\n\r\n// Cursor.prototype.updateCursorPosition= function(event) {\r\n//     this.pos = [event.clientX, event.clientY];\r\n// }\r\n\r\nmodule.exports = Cursor;\n\n//# sourceURL=webpack:///./src/cursor.js?");
-
-/***/ }),
-
-/***/ "./src/enemy.js":
-/*!**********************!*\
-  !*** ./src/enemy.js ***!
-  \**********************/
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
-
-eval("const MovingObject = __webpack_require__(/*! ./moving_object.js */ \"./src/moving_object.js\");\r\nconst Explosion = __webpack_require__(/*! ./explosion.js */ \"./src/explosion.js\");\r\n\r\nconst Util = __webpack_require__(/*! ./util.js */ \"./src/util.js\");\r\n\r\nconst Enemy = function(options){\r\n\r\n    this.pos = options.pos;\r\n    this.type = \"enemy\";\r\n    this.radius = 5;\r\n    this.vel = Util.randomFallingVec(Math.random()*1.2+0.5);\r\n    this.color = \"#e0e0e0\";\r\n    this.game = options.game;\r\n    \r\n    \r\n}\r\nUtil.inherits(Enemy, MovingObject);\r\n\r\nEnemy.prototype.collideWith = function (object){\r\n    if(object.type === \"explosion\"){\r\n        this.destroy();\r\n    }\r\n};\r\n\r\nEnemy.prototype.destroy = function(){\r\n    this.game.remove(this);\r\n    this.game.explosions.push(new Explosion({game: this.game, pos: this.pos}));\r\n}\r\n\r\n\r\n\r\n\r\nmodule.exports = Enemy;\n\n//# sourceURL=webpack:///./src/enemy.js?");
-
-/***/ }),
-
-/***/ "./src/explosion.js":
-/*!**************************!*\
-  !*** ./src/explosion.js ***!
-  \**************************/
-/***/ ((module) => {
-
-eval("const Explosion = function (options){\r\n    this.pos = options.pos;\r\n    this.type = \"explosion\";\r\n    this.radius = 2;\r\n    this.colors = [\"#aaaa00\", \"#aa3333\", \"#aa0011\"];\r\n    this.game = options.game;\r\n}\r\n\r\nExplosion.prototype.draw = function (ctx){\r\n    ctx.beginPath();\r\n    ctx.arc(this.pos[0], this.pos[1], this.radius, 0, 2*Math.PI);\r\n    ctx.lineWidth = 2;\r\n    ctx.stokeStyle = this.colors[Math.floor(Math.random()*3)];\r\n    ctx.fillStyle = this.colors[Math.floor(Math.random()*3)];\r\n    ctx.fill();\r\n}\r\n\r\n\r\nExplosion.prototype.expand = function (delta){\r\n    if (this.radius >= 26){\r\n        this.destroy();\r\n    }\r\n    debugger;\r\n    this.radius += .75*delta;\r\n}\r\n\r\nExplosion.prototype.move = Explosion.prototype.expand; //allows the rest of the game to call 'move' as an alias for 'expand'\r\n\r\nExplosion.prototype.destroy = function(){this.game.remove(this);}\r\n\r\nExplosion.prototype.draw = function (ctx){\r\n    ctx.beginPath();\r\n    ctx.arc(this.pos[0], this.pos[1], this.radius, 0, 2*Math.PI);\r\n    \r\n    //Random color each frame to give clicker effect\r\n    ctx.stokeStyle = this.colors[Math.floor(Math.random()*3)];\r\n    ctx.fillStyle = this.colors[Math.floor(Math.random()*3)];\r\n    ctx.fill();\r\n}\r\n\r\nExplosion.prototype.distanceFrom = function (pos){\r\n    dx = pos[0] - this.pos[0];\r\n    dy = pos[1] - this.pos[1];\r\n\r\n    return Math.sqrt(dx*dx + dy*dy);\r\n}\r\n\r\nExplosion.prototype.isCollidedWith = function (otherObject){\r\n    minDistance = this.radius + otherObject.radius;\r\n\r\n    return (minDistance > this.distanceFrom(otherObject.pos))\r\n}\r\n\r\nExplosion.prototype.collideWith = function (){};\r\n\r\nmodule.exports = Explosion;\n\n//# sourceURL=webpack:///./src/explosion.js?");
-
-/***/ }),
-
-/***/ "./src/game.js":
-/*!*********************!*\
-  !*** ./src/game.js ***!
-  \*********************/
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
-
-eval("const Enemy = __webpack_require__(/*! ./enemy.js */ \"./src/enemy.js\");\r\nconst Util = __webpack_require__(/*! ./util.js */ \"./src/util.js\");\r\nconst Cursor = __webpack_require__(/*! ./cursor.js */ \"./src/cursor.js\");\r\n\r\nconst DIM_X = 700;\r\nconst DIM_Y = 500;\r\n\r\nconst Game = function(ctx, enemySet){\r\n    this.bullets = [];\r\n    this.explosions = [];\r\n    this.enemies = [];\r\n    this.setupGame(ctx);\r\n    this.enemySet ||= [\r\n        this.addEnemy({game: this, pos: [250, 10]}),\r\n        this.addEnemy({game: this, pos: [350, 20]}),\r\n        this.addEnemy({game: this, pos: [150, 10]}),\r\n        this.addEnemy({game: this, pos: [250, 30]}),\r\n        this.addEnemy({game: this, pos: [150, 20]}),\r\n        this.addEnemy({game: this, pos: [350, 0]})\r\n    ]\r\n\r\n    this.ctx = ctx;\r\n\r\n    this.cursor = new Cursor({game: this});\r\n}\r\n\r\nGame.prototype.setupGame = function(ctx){\r\n    ctx.fillStyle = 'black';\r\n    ctx.fillRect(0, 0, 750, 400);\r\n    ctx.fillStyle = 'green';\r\n    ctx.fillRect(0, 400, 750, 100);\r\n}\r\n\r\n\r\nGame.prototype.draw = function(){\r\n    this.ctx.clearRect(0,0, 750, 500);\r\n    this.ctx.fillStyle = 'black';\r\n    this.ctx.fillRect(0, 0, 750, 400);\r\n    this.ctx.fillStyle = 'green';\r\n    this.ctx.fillRect(0, 400, 750, 100);\r\n    this.cursor.draw(this.ctx);\r\n    this.allObjects().forEach((obj) => {\r\n        obj.draw(this.ctx);\r\n    })\r\n}\r\n\r\n\r\nGame.prototype.step = function(delta){\r\n    this.moveObjects(delta);\r\n    this.checkCollisions();\r\n}\r\nGame.prototype.moveObjects = function(delta){\r\n    this.allObjects().forEach((obj) => {\r\n        obj.move(delta);\r\n    });\r\n    \r\n    this.draw();\r\n}\r\n\r\nGame.prototype.allObjects = function(){\r\n    return this.enemies.concat(this.bullets.concat(this.explosions));\r\n}\r\n\r\n\r\n\r\nGame.prototype.checkCollisions = function(){\r\n    this.enemies.forEach((enemy) => {\r\n        this.explosions.forEach((explosion) => {\r\n            // debugger;\r\n            if (enemy.isCollidedWith(explosion)){\r\n                enemy.destroy();\r\n            }\r\n        })\r\n        //Uncomment this code when cities are implemented\r\n        // this.cities().forEach((city) => {\r\n            //     if (enemy.isCollidedWith(city)){\r\n                //         enemy.destroy();\r\n                //         city.destroy();\r\n                //     }\r\n                // })\r\n            })\r\n        }\r\n        \r\n        \r\n        Game.prototype.remove = function(object){\r\n            if (object.type === \"enemy\"){\r\n                this.enemies = this.enemies.filter(item => item !== object);\r\n            } else if (object.type === \"bullet\") {\r\n                this.bullets = this.bullets.filter(item => item !== object);\r\n            } else if (object.type === \"explosion\"){\r\n                this.explosions = this.explosions.filter(item => item !== object);\r\n            }\r\n        }\r\n\r\n        Game.prototype.addEnemy = function(options){\r\n            this.enemies.push(new Enemy(options));\r\n        }\r\n\r\n        module.exports = Game;\n\n//# sourceURL=webpack:///./src/game.js?");
-
-/***/ }),
-
-/***/ "./src/game_view.js":
-/*!**************************!*\
-  !*** ./src/game_view.js ***!
-  \**************************/
-/***/ ((module) => {
-
-eval("// const KeyMaster = require(\"../dist/keymaster.js\");\r\n\r\n\r\nconst GameView = function (game, ctx){\r\n    this.game = game;\r\n    this.ctx = ctx;\r\n    this.lastTime = 0;\r\n}\r\n\r\nGameView.prototype.start = function start() {\r\n    // this.bindKeyHandlers();\r\n    this.lastTime = 0;\r\n    requestAnimationFrame(this.animate.bind(this));\r\n  };\r\n  \r\n  GameView.prototype.animate = function animate(time) {\r\n    const timeDelta = time - this.lastTime;\r\n    this.game.step(timeDelta/20);\r\n    this.lastTime = time;\r\n  \r\n    // every call to animate requests causes another call to animate\r\n    requestAnimationFrame(this.animate.bind(this));\r\n  };\r\n\r\nGameView.prototype.bindKeyHandlers = function(){\r\n    key('a', () => {this.game.ship.angle -= Math.PI/14});\r\n    key('s', () => {this.game.ship.power(-1)});\r\n    key('d', () => {this.game.ship.angle += Math.PI/14});\r\n    key('w', () => {this.game.ship.power(1)});\r\n    key('left', () => {this.game.ship.angle -= Math.PI/14});\r\n    key('down', () => {this.game.ship.power(-1)});\r\n    key('right', () => {this.game.ship.angle += Math.PI/14});\r\n    key('up', () => {this.game.ship.power(1)});\r\n    key('space', this.game.ship.fireBullet.bind(this.game.ship));\r\n}\r\n\r\nmodule.exports = GameView;\r\n\n\n//# sourceURL=webpack:///./src/game_view.js?");
-
-/***/ }),
-
 /***/ "./src/index.js":
 /*!**********************!*\
   !*** ./src/index.js ***!
   \**********************/
 /***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
 
-eval("addEventListener(\"DOMContentLoaded\", () => {\r\n    const Game = __webpack_require__(/*! ./game.js */ \"./src/game.js\");\r\n    const GameView = __webpack_require__(/*! ./game_view.js */ \"./src/game_view.js\");\r\n\r\n\r\n    \r\n    const canvasEl = document.getElementById('game-canvas');\r\n    canvasEl.width = 750;\r\n    canvasEl.height = 500;\r\n    let ctx = canvasEl.getContext('2d');\r\n\r\n    window.game = new Game(ctx);\r\n\r\n    gameView = new GameView(window.game, ctx);\r\n    gameView.start();\r\n\r\n})\r\n\n\n//# sourceURL=webpack:///./src/index.js?");
+eval("addEventListener(\"DOMContentLoaded\", () => {\r\n    const Game = __webpack_require__(/*! ./scripts/game.js */ \"./src/scripts/game.js\");\r\n    const GameView = __webpack_require__(/*! ./scripts/game_view.js */ \"./src/scripts/game_view.js\");\r\n\r\n\r\n    const canvasEl = document.getElementById('game-canvas');\r\n    canvasEl.width = 750;\r\n    canvasEl.height = 500;\r\n    let ctx = canvasEl.getContext('2d');\r\n    const gameContainer = document.getElementById('game-container');\r\n    const speedButtons = document.getElementsByClassName('speed-button');\r\n    const displayButtons = document.getElementsByClassName('display-button');\r\n\r\n\r\n    Array.from(displayButtons).forEach((button) => {\r\n        button.addEventListener('click', function(event){\r\n            if(event.target.value === \"Dark\"){\r\n                canvasEl.gameView.game.darkMode = true;\r\n                displayButtons[1].disabled = false;\r\n                displayButtons[0].disabled = true;\r\n            }\r\n            if(event.target.value === \"Light\"){\r\n                canvasEl.gameView.game.darkMode = false;\r\n                displayButtons[1].disabled = true;\r\n                displayButtons[0].disabled = false;\r\n            }\r\n        })\r\n    })\r\n    let speed = 2;\r\n    Array.from(speedButtons).forEach((button) => {\r\n        button.addEventListener('click', function(event){\r\n            let speeds = [5, 10, 20, 40, 80];\r\n            let speedometer = document.getElementById('speedometer');\r\n            \r\n            if (event.target.value===\"Slower\" && speed < 4){\r\n                speed += 1;\r\n                speedButtons[1].disabled = false;\r\n\r\n                if (speed >= 4){\r\n                    event.target.disabled = true;\r\n                }\r\n            } \r\n            \r\n            if (event.target.value===\"Faster\" && speed > 0){\r\n                speed -= 1;\r\n                speedButtons[0].disabled = false;\r\n\r\n                if (speed <= 0){\r\n                    event.target.disabled = true;\r\n                }\r\n            }\r\n\r\n            speedometer.innerText = [\"►►►►►\",\"►►►►\",\"►►►\",\"►►\",\"►\" ][speed];\r\n            canvasEl.gameView.speed = speeds[speed];\r\n        })\r\n    })\r\n\r\n    const game = new Game(ctx);\r\n\r\n    canvasEl.gameView = new GameView(game, ctx);\r\n\r\n    canvasEl.addEventListener('mousedown', (event) => {\r\n        if(event.detail > 1){\r\n            event.preventDefault();\r\n        }\r\n    })\r\n\r\n    gameContainer.addEventListener('mousemove', (event) => {\r\n        game.cursor.pos = [event.clientX - canvasEl.getBoundingClientRect().left, event.clientY - canvasEl.getBoundingClientRect().top]\r\n    });\r\n\r\n    gameContainer.addEventListener('click', (event) => {\r\n        if (event.target.value){\r\n            return\r\n        }\r\n        game.cursor.fire();\r\n    });\r\n\r\n    canvasEl.gameView.start();\r\n\r\n\r\n})\r\n\n\n//# sourceURL=webpack:///./src/index.js?");
 
 /***/ }),
 
-/***/ "./src/moving_object.js":
-/*!******************************!*\
-  !*** ./src/moving_object.js ***!
-  \******************************/
+/***/ "./src/scripts/game.js":
+/*!*****************************!*\
+  !*** ./src/scripts/game.js ***!
+  \*****************************/
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
-eval("const Explosion = __webpack_require__(/*! ./explosion.js */ \"./src/explosion.js\");\r\n\r\nconst MovingObject = function (options){\r\n    this.pos = options.pos;\r\n    this.vel = options.vel;\r\n    this.radius = options.radius;\r\n    this.color = options.color;\r\n    this.game = options.game;\r\n}\r\n\r\nMovingObject.prototype.draw = function (ctx){\r\n    ctx.beginPath();\r\n    ctx.arc(this.pos[0], this.pos[1], this.radius, 0, 2*Math.PI);\r\n    ctx.stokeStyle = \"white\";\r\n    ctx.lineWidth = 2;\r\n    ctx.stroke();\r\n    ctx.fillStyle = this.color;\r\n    ctx.fill();\r\n}\r\n\r\nMovingObject.prototype.move = function (timeDelta){\r\n    this.pos = [this.pos[0] + this.vel[0]*timeDelta, this.pos[1] + this.vel[1]*timeDelta];\r\n}\r\n\r\nMovingObject.prototype.distanceFrom = function (pos){\r\n    dx = pos[0] - this.pos[0];\r\n    dy = pos[1] - this.pos[1];\r\n\r\n    return Math.sqrt(dx*dx + dy*dy);\r\n}\r\n\r\nMovingObject.prototype.isCollidedWith = function (otherObject){\r\n    minDistance = this.radius + otherObject.radius;\r\n\r\n    return (minDistance > this.distanceFrom(otherObject.pos))\r\n}\r\n\r\nMovingObject.prototype.collideWith = function (){};\r\n\r\nMovingObject.prototype.destroy = function (){this.game.remove(this)};\r\n\r\n\r\nmodule.exports = MovingObject;\n\n//# sourceURL=webpack:///./src/moving_object.js?");
+eval("const Enemy = __webpack_require__(/*! ./sprites/enemy.js */ \"./src/scripts/sprites/enemy.js\");\r\nconst City = __webpack_require__(/*! ./sprites/city.js */ \"./src/scripts/sprites/city.js\");\r\nconst Tower = __webpack_require__(/*! ./sprites/tower.js */ \"./src/scripts/sprites/tower.js\");\r\nconst Cursor = __webpack_require__(/*! ./sprites/cursor.js */ \"./src/scripts/sprites/cursor.js\");\r\nconst Util = __webpack_require__(/*! ./util.js */ \"./src/scripts/util.js\");\r\n\r\nconst DIM_X = 700;\r\nconst DIM_Y = 500;\r\n\r\nconst Game = function(ctx){\r\n    this.ctx = ctx;\r\n    this.darkMode = true;\r\n    this.over = false;\r\n    this.bullets = [];\r\n    this.cities = [\r\n        new City({game: this, pos: [75, 450]}), \r\n        new City({game: this, pos: [175, 450]}), \r\n        new City({game: this, pos: [275, 450]}), \r\n        new City({game: this, pos: [425, 450]}), \r\n        new City({game: this, pos: [525, 450]}), \r\n        new City({game: this, pos: [625, 450]})\r\n    ];\r\n    this.towers = [new Tower({game: this})];\r\n    this.explosions = [];\r\n    this.enemies = [];\r\n    this.speed = 20;\r\n    this.setupGame(ctx);\r\n\r\n    this.cursor = new Cursor({game: this});\r\n}\r\n\r\nGame.prototype.setupGame = function(ctx){\r\n    setInterval(this.addEnemy.bind(this), 1500)   \r\n}\r\n\r\nGame.prototype.addEnemy = function(){\r\n    // debugger;\r\n    let friendlies = this.friendlyObjects();\r\n    let targetPos;\r\n    try{\r\n        targetPos = friendlies[Math.floor(Math.random()*friendlies.length)].pos;\r\n    } catch {\r\n        targetPos = [375, 400];\r\n    }\r\n    let spawnPos = Util.spawn(\"enemy\")\r\n\r\n    //Calculate angle from spawn to target # # # # # # # # # # # # # # # #\r\n    let diffs = [targetPos[0] - spawnPos[0], targetPos[1] - spawnPos[1]];\r\n    let angle = [Math.atan(diffs[1]/diffs[0])];\r\n    let movefix = diffs[0] < 0 ? -1 : 1;\r\n    let vel = [movefix*Math.cos(angle), movefix*Math.sin(angle)];\r\n    this.enemies.push(new Enemy({game: this, vel: vel, pos: spawnPos}));\r\n}\r\n\r\nGame.prototype.step = function(delta){\r\n    this.moveObjects(delta);\r\n    this.checkCollisions();\r\n    this.draw();\r\n}\r\n\r\nGame.prototype.isOver = function(){\r\n    if(this.cities.length === 0){\r\n        setTimeout(() => {this.over = true}, 2000)\r\n    }\r\n}\r\n\r\nGame.prototype.moveObjects = function(delta){\r\n    this.allObjects().forEach((obj) => {\r\n        obj.move(delta);\r\n    });\r\n}\r\n\r\nGame.prototype.checkCollisions = function(){\r\n    this.enemies.forEach((enemy) => {\r\n        this.explosions.forEach((explosion) => {\r\n            if (enemy.isCollidedWith(explosion)){\r\n                enemy.destroy();\r\n            }\r\n        })\r\n\r\n        this.cities.forEach((city) => {\r\n                if (enemy.isCollidedWith(city)){\r\n                        enemy.destroy();\r\n                        city.destroy();\r\n                    }\r\n        })\r\n    })\r\n}\r\n\r\nGame.prototype.draw = function(){\r\n    this.ctx.clearRect(0,0, 750, 500);\r\n    this.ctx.fillStyle = this.darkMode ? '#001019' : '#AAAAAA';\r\n    this.ctx.fillRect(0, 0, 750, 425);\r\n    this.ctx.fillStyle = this.darkMode ? 'darkgreen' : 'green';\r\n    this.ctx.fillRect(0, 425, 750, 75);\r\n    this.cursor.draw(this.ctx);\r\n    this.allObjects().forEach((obj) => {\r\n        obj.draw(this.ctx);\r\n    })\r\n}\r\nGame.prototype.allObjects = function(){\r\n    return this.enemies.concat(this.bullets.concat(this.explosions.concat(this.cities.concat(this.towers))));\r\n}\r\n\r\nGame.prototype.friendlyObjects = function(){ //will concat additional objects when implemented\r\n    return this.cities\r\n}\r\n             \r\nGame.prototype.remove = function(object){\r\n    if (object.type === \"enemy\"){\r\n        this.enemies = this.enemies.filter(item => item !== object);\r\n    } else if (object.type === \"bullet\") {\r\n        this.bullets = this.bullets.filter(item => item !== object);\r\n    } else if (object.type === \"explosion\"){\r\n        this.explosions = this.explosions.filter(item => item !== object);\r\n    } else if (object.type === \"city\"){\r\n        this.cities = this.cities.filter(item => item != object);\r\n    }\r\n}\r\n\r\nmodule.exports = Game;\n\n//# sourceURL=webpack:///./src/scripts/game.js?");
 
 /***/ }),
 
-/***/ "./src/util.js":
-/*!*********************!*\
-  !*** ./src/util.js ***!
-  \*********************/
+/***/ "./src/scripts/game_view.js":
+/*!**********************************!*\
+  !*** ./src/scripts/game_view.js ***!
+  \**********************************/
 /***/ ((module) => {
 
-eval("const Util = {\r\n    inherits: function inherits(childClass, parentClass){\r\n        const Surrogate = function(){};\r\n\r\n        // surr = new Surrogate();\r\n        \r\n        Surrogate.prototype = parentClass.prototype;\r\n        childClass.prototype = new Surrogate();\r\n        childClass.prototype.constructor = childClass;\r\n    },\r\n    \r\n    // Return a randomly oriented vector with the given length.\r\n    randomFallingVec: function randomFallingVec(length) {\r\n        const deg = Math.PI * (1/4)+ Math.PI * 0.5 * Math.random();\r\n        return Util.scale([Math.cos(deg), Math.sin(deg)], length);\r\n    },\r\n\r\n    // Scale the length of a vector by the given amount.\r\n    scale: function scale(vec, m) {\r\n        return [vec[0] * m, vec[1] * m];\r\n    }\r\n    \r\n  };\r\n\r\n  \r\n  module.exports = Util;\n\n//# sourceURL=webpack:///./src/util.js?");
+eval("// const KeyMaster = require(\"../dist/keymaster.js\");\r\n\r\n\r\nconst GameView = function (game, ctx){\r\n    this.game = game;\r\n    this.ctx = ctx;\r\n    this.lastTime = 0;\r\n    this.speed = 20;\r\n}\r\n\r\nGameView.prototype.start = function() {\r\n    // this.bindKeyHandlers();\r\n    this.lastTime = 0;\r\n    requestAnimationFrame(this.animate.bind(this));\r\n  };\r\n  \r\n  GameView.prototype.animate = function(time) {\r\n    const timeDelta = time - this.lastTime;\r\n    this.game.step(timeDelta/this.speed);\r\n    this.lastTime = time;\r\n    if (!this.game.over){\r\n      requestAnimationFrame(this.animate.bind(this));\r\n    }\r\n  };\r\n\r\nGameView.prototype.bindKeyHandlers = function(){\r\n    key('a', () => {this.game.ship.angle -= Math.PI/14});\r\n    key('s', () => {this.game.ship.power(-1)});\r\n    key('d', () => {this.game.ship.angle += Math.PI/14});\r\n    key('w', () => {this.game.ship.power(1)});\r\n    key('left', () => {this.game.ship.angle -= Math.PI/14});\r\n    key('down', () => {this.game.ship.power(-1)});\r\n    key('right', () => {this.game.ship.angle += Math.PI/14});\r\n    key('up', () => {this.game.ship.power(1)});\r\n    key('space', this.game.ship.fireBullet.bind(this.game.ship));\r\n}\r\n\r\nmodule.exports = GameView;\r\n\n\n//# sourceURL=webpack:///./src/scripts/game_view.js?");
+
+/***/ }),
+
+/***/ "./src/scripts/sprites/bullet.js":
+/*!***************************************!*\
+  !*** ./src/scripts/sprites/bullet.js ***!
+  \***************************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+eval("const MovingObject = __webpack_require__(/*! ./moving_object.js */ \"./src/scripts/sprites/moving_object.js\");\r\nconst Explosion = __webpack_require__(/*! ./explosion.js */ \"./src/scripts/sprites/explosion.js\");\r\nconst Util = __webpack_require__(/*! ../util.js */ \"./src/scripts/util.js\");\r\n\r\nconst Bullet = function(options){\r\n\r\n    //Position matches parent tower, must be dynamic to support multiple towers\r\n    this.pos = [375, 400];\r\n    this.radius = 1.5;\r\n    \r\n\r\n    //Provides access to other elements of the game\r\n    this.game = options.game;\r\n    \r\n    //Calculate angle from tower to cursor # # # # # # # # # # # # # # # #\r\n    let cursorPos = this.game.cursor.pos;\r\n    let diffs = [cursorPos[0] - this.pos[0], cursorPos[1] - this.pos[1]];\r\n    this.angle = [Math.atan(diffs[1]/diffs[0])];\r\n    this.terminus = cursorPos;\r\n\r\n    //Used for moving and drawing\r\n    let movefix = diffs[0] < 0 ? -8 : 8;\r\n    this.vel = [movefix * Math.cos(this.angle), movefix * Math.sin(this.angle)];\r\n    this.colors = [\"#ff8800\", \"#ff0000\",\"#ff0000\", \"#ff0000\"];\r\n    this.type = \"bullet\";\r\n\r\n}\r\n\r\nUtil.inherits(Bullet, MovingObject);\r\n\r\nBullet.prototype.draw = function (ctx){\r\n    ctx.beginPath();\r\n    ctx.arc(this.pos[0], this.pos[1], this.radius, 0, 2*Math.PI);\r\n    \r\n    //Random color each frame to give clicker effect\r\n    ctx.strokeStyle = this.colors[Math.floor(Math.random()*3)];\r\n    ctx.fillStyle = this.colors[Math.floor(Math.random()*3)];\r\n    ctx.fill();\r\n}\r\n\r\nBullet.prototype.move = function (delta){\r\n    this.pos = [this.pos[0] + this.vel[0]*delta, this.pos[1] + this.vel[1]*delta];\r\n\r\n    if (Math.abs(this.pos[0] - this.terminus[0]) < 5 && Math.abs(this.pos[1] - this.terminus[1] < 5)){\r\n        this.destroy();\r\n        this.game.explosions.push(new Explosion({pos: this.pos, game: this.game}));\r\n    }\r\n}\r\n\r\nmodule.exports = Bullet;\n\n//# sourceURL=webpack:///./src/scripts/sprites/bullet.js?");
+
+/***/ }),
+
+/***/ "./src/scripts/sprites/city.js":
+/*!*************************************!*\
+  !*** ./src/scripts/sprites/city.js ***!
+  \*************************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+eval("const StationaryObject = __webpack_require__(/*! ./stationary_object.js */ \"./src/scripts/sprites/stationary_object.js\");\r\nconst Util = __webpack_require__(/*! ../util.js */ \"./src/scripts/util.js\");\r\n\r\nconst City = function (options){\r\n    this.pos = options.pos;\r\n    this.type = \"city\";\r\n    this.radius = 5;\r\n    this.colors = [\"#FFFFFF\", \"#aa3333\", \"#aa0011\"];\r\n    this.game = options.game;\r\n}\r\n\r\nUtil.inherits(City, StationaryObject);\r\n\r\nCity.prototype.draw = function (ctx){\r\n    ctx.fillStyle = this.colors[0];\r\n    ctx.fillRect(this.pos[0] - this.radius, this.pos[1] - this.radius, this.radius*4, this.radius*2);\r\n}\r\n\r\n\r\nmodule.exports = City;\n\n//# sourceURL=webpack:///./src/scripts/sprites/city.js?");
+
+/***/ }),
+
+/***/ "./src/scripts/sprites/cursor.js":
+/*!***************************************!*\
+  !*** ./src/scripts/sprites/cursor.js ***!
+  \***************************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+eval("const Bullet = __webpack_require__(/*! ./bullet.js */ \"./src/scripts/sprites/bullet.js\");\r\n\r\n\r\nconst Cursor = function(options){\r\n    this.pos = [100, 100];\r\n    this.game = options.game;\r\n    this.canFire = true;\r\n}\r\n\r\nCursor.prototype.draw = function(ctx){\r\n    ctx.beginPath();\r\n    ctx.arc(this.pos[0], this.pos[1], 1, 0, 2*Math.PI);\r\n    ctx.strokeStyle = \"red\";\r\n    ctx.lineWidth = 1;\r\n    ctx.stroke();\r\n\r\n    ctx.beginPath();\r\n    ctx.arc(this.pos[0], this.pos[1], 7, 0, 2*Math.PI);\r\n    ctx.strokeStyle = \"#09ff00\";\r\n    ctx.lineWidth = 1;\r\n    ctx.stroke();\r\n}\r\n\r\nCursor.prototype.fire = function(){\r\n    if(this.canFire && this.pos[1] < 395){\r\n        this.game.bullets.push(new Bullet({game: this.game}));\r\n        this.canFire = false;\r\n        setTimeout(() => {this.canFire = true}, 750);\r\n    }\r\n}\r\n\r\n//How do I bind this event?\r\n\r\n// Cursor.prototype.updateCursorPosition= function(event) {\r\n//     this.pos = [event.clientX, event.clientY];\r\n// }\r\n\r\nmodule.exports = Cursor;\n\n//# sourceURL=webpack:///./src/scripts/sprites/cursor.js?");
+
+/***/ }),
+
+/***/ "./src/scripts/sprites/enemy.js":
+/*!**************************************!*\
+  !*** ./src/scripts/sprites/enemy.js ***!
+  \**************************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+eval("const MovingObject = __webpack_require__(/*! ./moving_object.js */ \"./src/scripts/sprites/moving_object.js\");\r\nconst Explosion = __webpack_require__(/*! ./explosion.js */ \"./src/scripts/sprites/explosion.js\");\r\nconst Util = __webpack_require__(/*! ../util.js */ \"./src/scripts/util.js\");\r\n\r\nconst Enemy = function(options){\r\n\r\n    this.pos = options.pos;\r\n    this.type = \"enemy\";\r\n    this.radius = 2;\r\n    this.vel = options.vel;\r\n    this.color = \"#e0e0e0\";\r\n    this.game = options.game;\r\n    \r\n    \r\n}\r\n\r\nUtil.inherits(Enemy, MovingObject);\r\n\r\n\r\nEnemy.prototype.destroy = function(){\r\n    this.game.remove(this);\r\n    this.game.explosions.push(new Explosion({game: this.game, pos: this.pos}));\r\n}\r\n\r\nEnemy.prototype.move = function(delta){\r\n    MovingObject.prototype.move.call(this, delta);\r\n    if(this.pos[1] > 465){\r\n        this.destroy();\r\n    }\r\n}\r\n\r\n\r\n\r\n\r\nmodule.exports = Enemy;\n\n//# sourceURL=webpack:///./src/scripts/sprites/enemy.js?");
+
+/***/ }),
+
+/***/ "./src/scripts/sprites/explosion.js":
+/*!******************************************!*\
+  !*** ./src/scripts/sprites/explosion.js ***!
+  \******************************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+eval("const StationaryObject = __webpack_require__(/*! ./stationary_object.js */ \"./src/scripts/sprites/stationary_object.js\");\r\nconst Util = __webpack_require__(/*! ../util.js */ \"./src/scripts/util.js\");\r\n\r\nconst Explosion = function (options){\r\n    this.pos = options.pos;\r\n    this.type = \"explosion\";\r\n    this.radius = 2;\r\n    this.colors = [\"#aaaa00\", \"#aa3333\", \"#aa0011\"];\r\n    this.game = options.game;\r\n}\r\n\r\nUtil.inherits(Explosion, StationaryObject);\r\n\r\nExplosion.prototype.draw = function (ctx){\r\n    ctx.beginPath();\r\n    ctx.arc(this.pos[0], this.pos[1], this.radius, 0, 2*Math.PI);\r\n    ctx.lineWidth = 2;\r\n    ctx.strokeStyle = this.colors[Math.floor(Math.random()*3)];\r\n    ctx.fillStyle = this.colors[Math.floor(Math.random()*3)];\r\n    ctx.fill();\r\n}\r\n\r\n\r\nExplosion.prototype.expand = function (delta){\r\n    if (this.radius >= 30) {this.destroy()}\r\n    this.radius += 0.75*delta;\r\n}\r\n\r\nExplosion.prototype.move = Explosion.prototype.expand; //allows the rest of the game to call 'move' as an alias for 'expand'\r\n\r\n\r\n\r\nmodule.exports = Explosion;\n\n//# sourceURL=webpack:///./src/scripts/sprites/explosion.js?");
+
+/***/ }),
+
+/***/ "./src/scripts/sprites/moving_object.js":
+/*!**********************************************!*\
+  !*** ./src/scripts/sprites/moving_object.js ***!
+  \**********************************************/
+/***/ ((module) => {
+
+eval("const MovingObject = function (options){\r\n    this.pos = options.pos;\r\n    this.vel = options.vel;\r\n    this.radius = 2;\r\n    this.color = \"#FFFFFF\"\r\n    this.game = options.game;\r\n}\r\n\r\nMovingObject.prototype.draw = function (ctx){\r\n    ctx.beginPath();\r\n    ctx.arc(this.pos[0], this.pos[1], this.radius, 0, 2*Math.PI);\r\n    ctx.strokeStyle = \"white\";\r\n    ctx.lineWidth = 2;\r\n    ctx.stroke();\r\n    ctx.fillStyle = this.color;\r\n    ctx.fill();\r\n}\r\n\r\nMovingObject.prototype.move = function (timeDelta){\r\n    this.pos = [this.pos[0] + this.vel[0]*timeDelta, this.pos[1] + this.vel[1]*timeDelta];\r\n}\r\n\r\nMovingObject.prototype.distanceFrom = function (pos){\r\n    dx = pos[0] - this.pos[0];\r\n    dy = pos[1] - this.pos[1];\r\n    return Math.sqrt(dx*dx + dy*dy);\r\n}\r\n\r\nMovingObject.prototype.isCollidedWith = function (otherObject){\r\n    minDistance = this.radius + otherObject.radius;\r\n    return (minDistance > this.distanceFrom(otherObject.pos))\r\n}\r\n\r\nMovingObject.prototype.destroy = function (){this.game.remove(this)};\r\n\r\n\r\nmodule.exports = MovingObject;\n\n//# sourceURL=webpack:///./src/scripts/sprites/moving_object.js?");
+
+/***/ }),
+
+/***/ "./src/scripts/sprites/stationary_object.js":
+/*!**************************************************!*\
+  !*** ./src/scripts/sprites/stationary_object.js ***!
+  \**************************************************/
+/***/ ((module) => {
+
+eval("const StationaryObject = function (options){\r\n    this.pos = options.pos || [250, 250];\r\n    this.radius = 2;\r\n    this.colors = \"#FFFFFF\";\r\n    this.game = options.game;\r\n}\r\n\r\nStationaryObject.prototype.draw = function (ctx){\r\n    ctx.beginPath();\r\n    ctx.arc(this.pos[0], this.pos[1], this.radius, 0, 2*Math.PI);\r\n    ctx.lineWidth = 2;\r\n    ctx.strokeStyle = this.color;\r\n    ctx.fillStyle = this.color;\r\n    ctx.fill();\r\n}\r\n\r\nStationaryObject.prototype.distanceFrom = function (pos){\r\n    dx = pos[0] - this.pos[0];\r\n    dy = pos[1] - this.pos[1];\r\n    return Math.sqrt(dx*dx + dy*dy);\r\n}\r\n\r\nStationaryObject.prototype.move = function(){}\r\n\r\nStationaryObject.prototype.destroy = function(){this.game.remove(this);}\r\n\r\n\r\nStationaryObject.prototype.isCollidedWith = function (otherObject){\r\n    minDistance = this.radius + otherObject.radius;\r\n    return (minDistance > this.distanceFrom(otherObject.pos))\r\n}\r\n\r\n\r\nmodule.exports = StationaryObject;\n\n//# sourceURL=webpack:///./src/scripts/sprites/stationary_object.js?");
+
+/***/ }),
+
+/***/ "./src/scripts/sprites/tower.js":
+/*!**************************************!*\
+  !*** ./src/scripts/sprites/tower.js ***!
+  \**************************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+eval("const StationaryObject = __webpack_require__(/*! ./stationary_object.js */ \"./src/scripts/sprites/stationary_object.js\");\r\nconst Util = __webpack_require__(/*! ../util.js */ \"./src/scripts/util.js\");\r\n\r\nconst Tower = function (options){\r\n    this.pos = options.pos || [375, 400];\r\n    this.type = \"tower\";\r\n    this.radius = 10;\r\n    this.colors = [\"#888888\", \"#666666\", \"#aa0011\"];\r\n    this.game = options.game;\r\n}\r\n\r\nUtil.inherits(Tower, StationaryObject);\r\n\r\nTower.prototype.draw = function (ctx){\r\n    let cursorPos = this.game.cursor.pos;\r\n    let diffs = [cursorPos[0] - this.pos[0], cursorPos[1] - this.pos[1]- 5];\r\n    this.angle = [Math.atan(diffs[1]/diffs[0])];\r\n    let movefix = diffs[0] < 0 ? -1 : 1;\r\n\r\n    //Barrel\r\n    ctx.beginPath();\r\n    ctx.strokeStyle = this.colors[1];\r\n    ctx.moveTo(this.pos[0], this.pos[1]);\r\n    ctx.lineTo(this.pos[0] + movefix*20*Math.cos(this.angle), this.pos[1] + movefix*20*Math.sin(this.angle));\r\n    // ctx.lineTo(this.pos[0], this.pos[1] - 20);\r\n    ctx.lineWidth = 5;\r\n    ctx.stroke();\r\n\r\n    //Base\r\n    ctx.fillStyle = this.colors[0];\r\n    ctx.fillRect(this.pos[0] - 10, this.pos[1], 20, 35);\r\n\r\n    //Dome\r\n    ctx.beginPath();\r\n    ctx.arc(this.pos[0], this.pos[1], 8, 0, Math.PI, true)\r\n    ctx.fill();\r\n}\r\n\r\n\r\nmodule.exports = Tower;\n\n//# sourceURL=webpack:///./src/scripts/sprites/tower.js?");
+
+/***/ }),
+
+/***/ "./src/scripts/util.js":
+/*!*****************************!*\
+  !*** ./src/scripts/util.js ***!
+  \*****************************/
+/***/ ((module) => {
+
+eval("const Util = {\r\n    inherits: function inherits(childClass, parentClass){\r\n        const Surrogate = function(){};        \r\n        Surrogate.prototype = parentClass.prototype;\r\n        childClass.prototype = new Surrogate();\r\n        childClass.prototype.constructor = childClass;\r\n    },\r\n    \r\n    // Return a randomly oriented vector with the given length.\r\n    randomFallingVec: function randomFallingVec(length) {\r\n        const deg = Math.PI * (1/4)+ Math.PI * 0.5 * Math.random();\r\n        return Util.scale([Math.cos(deg), Math.sin(deg)], length);\r\n    },\r\n\r\n\r\n\r\n    // Scale the length of a vector by the given amount.\r\n    scale: function scale(vec, m) {\r\n        return [vec[0] * m, vec[1] * m];\r\n    },\r\n\r\n    spawn: function spawn(type){\r\n        type = type || \"enemy\";\r\n        \r\n        if (type === \"enemy\"){\r\n            return [Math.floor(Math.random()*771-10), Math.floor(Math.random()*150-100)]\r\n        }\r\n    }\r\n    \r\n  };\r\n\r\n  \r\n  module.exports = Util;\n\n//# sourceURL=webpack:///./src/scripts/util.js?");
 
 /***/ })
 

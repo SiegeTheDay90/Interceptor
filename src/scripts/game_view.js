@@ -5,21 +5,22 @@ const GameView = function (game, ctx){
     this.game = game;
     this.ctx = ctx;
     this.lastTime = 0;
+    this.speed = 20;
 }
 
-GameView.prototype.start = function start() {
+GameView.prototype.start = function() {
     // this.bindKeyHandlers();
     this.lastTime = 0;
     requestAnimationFrame(this.animate.bind(this));
   };
   
-  GameView.prototype.animate = function animate(time) {
+  GameView.prototype.animate = function(time) {
     const timeDelta = time - this.lastTime;
-    this.game.step(timeDelta/20);
+    this.game.step(timeDelta/this.speed);
     this.lastTime = time;
-  
-    // every call to animate requests causes another call to animate
-    requestAnimationFrame(this.animate.bind(this));
+    if (!this.game.over){
+      requestAnimationFrame(this.animate.bind(this));
+    }
   };
 
 GameView.prototype.bindKeyHandlers = function(){
