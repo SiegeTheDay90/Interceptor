@@ -2,9 +2,13 @@
     font-family: Helvetica;
 }
 
+html {background: #051821}
+
 h1 {
     font-size: 36px;
+    font-weight: 700;
 }
+
 #game-container {
     background: #051821;
     width: 100%;
@@ -27,47 +31,8 @@ h3, h4 {
         margin: 10% 0 5% 0;
 }
 
-.settings {
-    color: #FBBC24;
-    margin-left: 15px;
-}
 
-.settings > div, .settings > div > form input {
-    margin-left: 30px;
-    padding-right: 10px;
-    margin-bottom: 10px;
-}
-
-.settings > div, .settings > div > #speedometer {
-    margin-left: 15px;
-    margin-bottom: 10px;
-}
-
-.speed-button, .display-button {
-    background-color: #1A4645;
-    border-width: 0;
-    color: inherit;
-    border-radius: 8px;
-}
-
-.speed-button:disabled, .display-button:disabled {
-    background-color: #053030;
-    color: #BB7C00;
-    border-radius: 8px;
-}
-
-#speedometer {
-    
-    width: 60px;
-    padding: 3px;
-    padding-left: 5px;
-    background: #BB7C00;
-    color: #1A6665;
-    border-radius: 5px;
-    font-size: 12px;
-    font-family: Helvetica;
-}
-
+/* HUD Styles ----------------------------------------------------------------------- */
 .game-hud {
     background: #1A4645;
     width: 100%;
@@ -78,11 +43,20 @@ h3, h4 {
     color: #f58800;
 }
 
+#hud-score{
+    padding-right: 100px;
+}
+
 #hud-spacer {
     width: 15%;
 }
+#hud-lives {
+    padding-left: 50px;
+}
 
 
+
+/* Header Styles---------------------------------------------------------------------- */
 .header-logo {
     height: 75px;
     width: 75px;
@@ -105,4 +79,50 @@ header {
     padding-bottom: 10px;
     background:#051821;
     color: #1A4645;
+}
+
+
+/* Settings Styles -------------------------------------------------------------------- */
+.settings {
+    color: #FBBC24;
+    margin-left: 15px;
+}
+
+.settings > div, .settings > div > form input {
+    margin-left: 15px;
+    padding-right: 10px;
+    margin-bottom: 10px;
+}
+
+.settings > div, .settings > div > #speedometer {
+    margin-left: 15px;
+    margin-bottom: 10px;
+}
+
+.speed-button, .display-button, .control-button {
+    background-color: #1A4645;
+    border-width: 0;
+    width: 80px;
+    color: inherit;
+    cursor: pointer;
+    border-radius: 8px;
+}
+
+.speed-button:disabled, .display-button:disabled, .control-button:disabled {
+    background-color: #053030;
+    color: #BB7C00;
+    border-radius: 8px;
+}
+
+#speedometer {
+    
+    width: 70px;
+    text-align: center;
+    padding: 3px;
+    padding-left: 7px;
+    background: #BB7C00;
+    color: #1A6665;
+    border-radius: 5px;
+    font-size: 12px;
+    font-family: Helvetica;
 }

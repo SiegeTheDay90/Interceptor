@@ -1,4 +1,5 @@
 const Enemy = require("./sprites/enemy.js");
+const ZigZag = require("./sprites/zigzag.js");
 const City = require("./sprites/city.js");
 const Tower = require("./sprites/tower.js");
 const Cursor = require("./sprites/cursor.js");
@@ -11,6 +12,7 @@ const Game = function(ctx){
     this.ctx = ctx;
     this.darkMode = true;
     this.over = false;
+    this.score = 0;
     this.bullets = [];
     this.cities = [
         new City({game: this, pos: [75, 450]}), 
@@ -34,7 +36,6 @@ Game.prototype.setupGame = function(ctx){
 }
 
 Game.prototype.addEnemy = function(){
-    // debugger;
     let friendlies = this.friendlyObjects();
     let targetPos;
     try{
@@ -42,14 +43,20 @@ Game.prototype.addEnemy = function(){
     } catch {
         targetPos = [375, 400];
     }
-    let spawnPos = Util.spawn("enemy")
+    let spawnPos = Util.spawn("enemy");
 
     //Calculate angle from spawn to target # # # # # # # # # # # # # # # #
     let diffs = [targetPos[0] - spawnPos[0], targetPos[1] - spawnPos[1]];
     let angle = [Math.atan(diffs[1]/diffs[0])];
     let movefix = diffs[0] < 0 ? -1 : 1;
     let vel = [movefix*Math.cos(angle), movefix*Math.sin(angle)];
-    this.enemies.push(new Enemy({game: this, vel: vel, pos: spawnPos}));
+
+    let enemyType = Math.random();
+    if (enemyType > 0.1){
+        this.enemies.push(new ZigZag({game: this, vel: vel, pos: spawnPos}));
+    } else {
+        this.enemies.push(new Enemy({game: this, vel: vel, pos: spawnPos}));
+    }
 }
 
 Game.prototype.step = function(delta){
