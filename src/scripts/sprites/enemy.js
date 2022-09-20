@@ -19,7 +19,7 @@ Util.inherits(Enemy, MovingObject);
 
 
 Enemy.prototype.destroy = function(){
-    if (this.pos[1] < 395){
+    if (this.pos[1] < 395 && !this.game.over && this.game.started){
         this.game.score += 50;
         document.getElementById('hud-score').innerHTML = `Score: ${this.game.score}`;
     }

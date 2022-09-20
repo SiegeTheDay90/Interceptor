@@ -11,28 +11,73 @@ const DIM_Y = 500;
 const Game = function(ctx){
     this.ctx = ctx;
     this.darkMode = true;
+    this.started = false;
     this.over = false;
     this.score = 0;
     this.bullets = [];
-    this.cities = [
-        new City({game: this, pos: [75, 450]}), 
-        new City({game: this, pos: [175, 450]}), 
-        new City({game: this, pos: [275, 450]}), 
-        new City({game: this, pos: [425, 450]}), 
-        new City({game: this, pos: [525, 450]}), 
-        new City({game: this, pos: [625, 450]})
-    ];
-    this.towers = [new Tower({game: this})];
+    this.cities = [];
+    this.towers = [];
     this.explosions = [];
     this.enemies = [];
     this.speed = 20;
-    this.setupGame(ctx);
-
+    this.logo = new Image();
+    this.logo.src = 'logo.png';
     this.cursor = new Cursor({game: this});
+    this.welcome();
 }
 
-Game.prototype.setupGame = function(ctx){
-    setInterval(this.addEnemy.bind(this), 1500)   
+Game.prototype.welcome = function(){
+    if (this.score > 0){
+        let highscores = JSON.parse(window.localStorage['highscores']);
+
+        highscores.push(this.score);
+        highscores.sort((f, s) => s - f);
+        highscores = highscores.slice(0, 5);
+
+        window.localStorage['highscores'] = JSON.stringify(highscores);
+
+        const highScoresList = document.getElementById('high-scores-list');      
+        highScoresList.innerHTML = "";     
+            
+        highscores.forEach((score) => {
+            let newLi = document.createElement("li");
+            newLi.innerText = `${score}`;
+            highScoresList.appendChild(newLi);
+        })
+    }
+    this.enemySpawn = setInterval(this.addEnemy.bind(this), 1500);
+    this.started = false;
+    this.over = false;
+    this.cities = [
+        new City({game: this, pos: [175, 440]}), 
+        new City({game: this, pos: [475, 450]}), 
+        new City({game: this, pos: [325, 460]}), 
+        new City({game: this, pos: [625, 445]})
+    ];       
+}
+
+Game.prototype.setupGame = function(){
+    document.getElementById('hud-score').innerHTML = "Score: 0";
+    clearInterval(this.enemySpawn);
+    this.started = true;
+    this.score = 0;
+    this.bullets = [];
+    this.cities = [];
+    this.towers = [];
+    this.explosions = [];
+    this.enemies = [];
+    this.enemySpawn = setInterval(this.addEnemy.bind(this), 1500);
+    this.towers = [new Tower({game: this})];
+    this.cities = [
+        new City({game: this, pos: [75, 450]}), 
+        // new City({game: this, pos: [175, 450]}), 
+        // new City({game: this, pos: [275, 450]}), 
+        // new City({game: this, pos: [425, 450]}), 
+        // new City({game: this, pos: [525, 450]}), 
+        new City({game: this, pos: [625, 450]})
+    ];
+    this.overCheck = setInterval(this.isOver.bind(this), 250);
+      
 }
 
 Game.prototype.addEnemy = function(){
@@ -52,7 +97,7 @@ Game.prototype.addEnemy = function(){
     let vel = [movefix*Math.cos(angle), movefix*Math.sin(angle)];
 
     let enemyType = Math.random();
-    if (enemyType > 0.1){
+    if (enemyType > 0.85){
         this.enemies.push(new ZigZag({game: this, vel: vel, pos: spawnPos}));
     } else {
         this.enemies.push(new Enemy({game: this, vel: vel, pos: spawnPos}));
@@ -66,8 +111,11 @@ Game.prototype.step = function(delta){
 }
 
 Game.prototype.isOver = function(){
-    if(this.cities.length === 0){
-        setTimeout(() => {this.over = true}, 2000)
+    if(this.cities.length === 0 && this.started){
+        setTimeout(() => {
+            this.over = true; 
+            clearInterval(this.overCheck);
+            clearInterval(this.enemySpawn)}, 1000);
     }
 }
 
@@ -98,18 +146,40 @@ Game.prototype.draw = function(){
     this.ctx.clearRect(0,0, 750, 500);
     this.ctx.fillStyle = this.darkMode ? '#001019' : '#AAAAAA';
     this.ctx.fillRect(0, 0, 750, 425);
-    this.ctx.fillStyle = this.darkMode ? 'darkgreen' : 'green';
+    this.ctx.fillStyle = this.darkMode ? 'darkgreen' : 'lightgreen';
     this.ctx.fillRect(0, 425, 750, 75);
-    this.cursor.draw(this.ctx);
+
     this.allObjects().forEach((obj) => {
         obj.draw(this.ctx);
-    })
+    });
+
+    if(!this.started){
+        this.ctx.drawImage(this.logo, 186, 0, 372, 230);
+        this.ctx.font = "24px serif";
+        this.ctx.fillStyle = ["#f58800", "#f58800", "#f58800", "#ff4400", "#e37600"][Math.floor(Math.random()*5)];
+        this.ctx.fillText("Click Anywhere to Begin", 246, 220);
+    };
+
+    if(this.over && this.started){
+        this.ctx.font = "24px serif";
+        this.ctx.fillStyle = ["#f58800", "#ff4400", "#ff4400", "#ff4400", "#e37600"][Math.floor(Math.random()*5)];
+        this.ctx.fillText("Game Over! Click to try again.", 220, 220);
+        let highscores = JSON.parse(window.localStorage['highscores']);
+        if((highscores.some((score) => this.score > score) || highscores.length===0) && this.score > 0){
+            this.ctx.fillStyle = ["#e5f800", "#eeff00", "#ff4400", "#ff4400", "#e39600"][Math.floor(Math.random()*5)];
+            this.ctx.fillText("New High Score!", 230, 260);
+        }
+
+    };
+
+    this.cursor.draw(this.ctx);
+    
 }
 Game.prototype.allObjects = function(){
     return this.enemies.concat(this.bullets.concat(this.explosions.concat(this.cities.concat(this.towers))));
 }
 
-Game.prototype.friendlyObjects = function(){ //will concat additional objects when implemented
+Game.prototype.friendlyObjects = function(){
     return this.cities
 }
              

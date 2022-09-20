@@ -26,7 +26,7 @@
         <div class='game-hud'>
             <span id='hud-score' class='hud-element'>Score: 0</span>
             <div id='hud-spacer'></div>
-            <span id='hud-lives' class='hud-element'>Lives: 🚀🚀🚀</span>
+            <!-- <span id='hud-lives' class='hud-element'>Lives: 🚀🚀🚀</span> -->
         </div>
 
         <section class='settings'>
@@ -57,8 +57,11 @@
 
         <canvas style ='cursor: none' id = "game-canvas"></canvas>        
         
-        <section class='high-scores'>
-            High Scores
+        <section class='high-scores' style="margin-left: 30px">
+            <h3>High Scores</h3>
+            <ol id ='high-scores-list'>
+            </ol>
+            <button id="clear-high-scores" value="clear" class="clear-button">Clear Local Scores</button>
         </section>
     </div>
 </body>

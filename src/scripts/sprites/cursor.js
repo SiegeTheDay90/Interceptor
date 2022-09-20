@@ -22,17 +22,17 @@ Cursor.prototype.draw = function(ctx){
 }
 
 Cursor.prototype.fire = function(){
-    if(this.canFire && this.pos[1] < 395){
+    if(this.game.started && this.canFire && this.pos[1] < 395){
         this.game.bullets.push(new Bullet({game: this.game}));
         this.canFire = false;
         setTimeout(() => {this.canFire = true}, 750);
     }
+    if(!this.game.started && !this.game.over){
+        this.game.setupGame();
+    }
+    if(this.game.over && this.game.started){
+        this.game.welcome();
+    }
 }
-
-//How do I bind this event?
-
-// Cursor.prototype.updateCursorPosition= function(event) {
-//     this.pos = [event.clientX, event.clientY];
-// }
 
 module.exports = Cursor;

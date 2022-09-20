@@ -44,7 +44,8 @@ h3, h4 {
 }
 
 #hud-score{
-    padding-right: 100px;
+    width: 200px;
+    text-align: left;
 }
 
 #hud-spacer {
@@ -108,6 +109,8 @@ header {
     border-radius: 8px;
 }
 
+
+
 .speed-button:disabled, .display-button:disabled, .control-button:disabled {
     background-color: #053030;
     color: #BB7C00;
@@ -125,4 +128,48 @@ header {
     border-radius: 5px;
     font-size: 12px;
     font-family: Helvetica;
+}
+
+/* High Scores styling -------------------------------------------------------------- */
+
+/* #high-scores-list {
+    list-style: none;
+    counter-reset: rank;
+}
+
+#high-scores-list li::before {
+    content: counter(rank);
+    color: #1A6665;
+    display: inline-block;
+    width: 1.5em;
+    margin-left: -2em;
+} */
+
+#high-scores-list li::marker {
+    color: #1A6665;
+    font-weight: 900;
+}
+
+#high-scores-list li {
+    color:#BB7C00;
+    line-height: 1.5em;
+    font-weight: 700;
+    counter-increment: rank;
+}
+
+.clear-button {
+    background-color: #1A4645;
+    border-width: 0;
+    width: 85px;
+    color: #BB7C00;
+    cursor: pointer;
+    border-radius: 8px;
+}
+
+.confirm-button {
+    color: #053030;
+    background-color: #BB7C00;
+    width: 85px;
+    cursor: pointer;
+    border-radius: 8px;
 }

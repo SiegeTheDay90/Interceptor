@@ -13,6 +13,48 @@ addEventListener("DOMContentLoaded", () => {
     const controlButtons = document.getElementsByClassName('control-button');
     const game = new Game(ctx);
     canvasEl.gameView = new GameView(game, ctx);
+    
+    if(!window.localStorage['highscores']){
+        window.localStorage['highscores'] = JSON.stringify([]);
+    };
+
+    
+
+    const highScoresList = document.getElementById('high-scores-list');
+    let highscores = JSON.parse(window.localStorage['highscores']);
+    
+    highscores.forEach((score) => {
+        let newLi = document.createElement("li");
+        newLi.innerText = `${score}`;
+        highScoresList.appendChild(newLi);
+    });
+
+    const clearScoresButton = document.getElementById('clear-high-scores');
+
+    clearScoresButton.addEventListener('click', (event) => {
+        if (event.target.value === "clear"){
+            event.target.value = "confirm";
+            event.target.classList.remove('clear-button');
+            event.target.classList.add('confirm-button');
+            event.target.innerText = "Click Again to Confirm";
+            this.clearAlert = setTimeout(() => {
+                event.target.value = "clear"; 
+                event.target.innerText = "Clear Local Scores";
+                event.target.classList.remove('confirm-button');
+                event.target.classList.add('clear-button');
+            }, 5000);
+        } else {
+            clearTimeout(this.clearAlert);
+            event.target.classList.remove('confirm-button');
+            event.target.classList.add('clear-button');
+            event.target.value = "clear";
+            event.target.innerText = "Clear Local Scores";
+            window.localStorage['highscores'] = '[]';
+            document.getElementById('high-scores-list').innerHTML = "";
+        }
+    });
+
+
 
     let mouseControl = true;
     let keyboardControl = false;
@@ -21,13 +63,18 @@ addEventListener("DOMContentLoaded", () => {
             if(event.target.value === "Mouse"){
                 controlButtons[1].disabled = false;
                 controlButtons[0].disabled = true;
+                mouseControl = true;
+                keyboardControl = false;
             }
             if(event.target.value === "Keyboard"){
+                game.cursor.pos = [canvasEl.width/2, canvasEl.height/2]
                 controlButtons[1].disabled = true;
                 controlButtons[0].disabled = false;
+                mouseControl = false;
+                keyboardControl = true;
             }
         })
-    })
+    });
     Array.from(displayButtons).forEach((button) => {
         button.addEventListener('click', function(event){
             if(event.target.value === "Dark"){
@@ -41,7 +88,7 @@ addEventListener("DOMContentLoaded", () => {
                 displayButtons[0].disabled = false;
             }
         })
-    })
+    });
     let speed = 1;
     Array.from(speedButtons).forEach((button) => {
         button.addEventListener('click', function(event){
@@ -69,21 +116,22 @@ addEventListener("DOMContentLoaded", () => {
             speedometer.innerText = ["►","►►","►►►","►►►►"][speed];
             canvasEl.gameView.speed = speeds[speed];
         })
-    })
+    });
 
 
     function setMouseListeners(){
         gameContainer.addEventListener('mousemove', (event) => {
-            game.cursor.pos = [event.clientX - canvasEl.getBoundingClientRect().left, event.clientY - canvasEl.getBoundingClientRect().top]
+            if(mouseControl){
+                game.cursor.pos = [event.clientX - canvasEl.getBoundingClientRect().left, event.clientY - canvasEl.getBoundingClientRect().top]
+            }
         });
     
-        gameContainer.addEventListener('click', (event) => {
-            if (event.target.value){
-                return
+        canvasEl.addEventListener('click', (event) => {
+            if(mouseControl){
+                game.cursor.fire();
             }
-            game.cursor.fire();
         });
-    }
+    };
 
     function setKeyboardListeners(){
         let left;
@@ -97,55 +145,54 @@ addEventListener("DOMContentLoaded", () => {
         let downDown = false;
         let fireDown = false;
         window.addEventListener('keydown', (event) => {
-            if (["d", "ArrowRight"].includes(event.key) && rightDown === false){
+            if (keyboardControl && ["d", "ArrowRight"].includes(event.key) && rightDown === false){
                 event.preventDefault();
                 rightDown = true;
                 right = setInterval(() => {game.cursor.pos[0] += 6}, 30);
             }
-            if (["a", "ArrowLeft"].includes(event.key) && leftDown === false){
+            if (keyboardControl && ["a", "ArrowLeft"].includes(event.key) && leftDown === false){
                 event.preventDefault();
                 leftDown = true;
                 left = setInterval(() => {game.cursor.pos[0] -= 6}, 30);
             }
-            if (["w", "ArrowUp"].includes(event.key) && upDown === false){
+            if (keyboardControl && ["w", "ArrowUp"].includes(event.key) && upDown === false){
                 event.preventDefault();
                 upDown = true;
                 up = setInterval(() => {game.cursor.pos[1] -= 6}, 30);
             }
-            if (["s", "ArrowDown"].includes(event.key) && downDown === false){
+            if (keyboardControl && ["s", "ArrowDown"].includes(event.key) && downDown === false){
                 event.preventDefault();
                 downDown = true;
                 down = setInterval(() => {game.cursor.pos[1] += 6}, 30);
             }
         });
         window.addEventListener('keyup', (event) => {
-            if (["d", "ArrowRight"].includes(event.key)){
+            if (keyboardControl && ["d", "ArrowRight"].includes(event.key)){
                 rightDown = false;
                 clearInterval(right);
             }
-            if (["a", "ArrowLeft"].includes(event.key)){
+            if (keyboardControl && ["a", "ArrowLeft"].includes(event.key)){
                 leftDown = false;
                 clearInterval(left);
             }
-            if (["w", "ArrowUp"].includes(event.key)){
+            if (keyboardControl && ["w", "ArrowUp"].includes(event.key)){
                 upDown = false;
                 clearInterval(up);
             }
-            if (["s", "ArrowDown"].includes(event.key)){
+            if (keyboardControl && ["s", "ArrowDown"].includes(event.key)){
                 downDown = false;
                 clearInterval(down);
             }
             window.addEventListener('keypress', (event) => {
-                if (event.key == " "){
+                if (keyboardControl && event.key == " "){
                     game.cursor.fire();
                 }
             });
         });
-    }
+    };
 
     setMouseListeners();
     setKeyboardListeners();
+
     canvasEl.gameView.start();
-
-
-})
+});
