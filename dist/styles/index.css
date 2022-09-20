@@ -74,10 +74,8 @@ header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-top: 25px;
     padding-left: 25px;
     padding-right: 25px;
-    padding-bottom: 10px;
     background:#051821;
     color: #1A4645;
 }

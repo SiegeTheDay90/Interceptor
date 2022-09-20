@@ -21,7 +21,11 @@ const Game = function(ctx){
     this.enemies = [];
     this.speed = 20;
     this.logo = new Image();
-    this.logo.src = 'logo.png';
+    this.logo.src = 'images/logo.png';
+    this.mc = new Image();
+    this.mc.src = 'images/mousecontrols.png';
+    this.kc = new Image();
+    this.kc.src = 'images/keyboardcontrols.png';
     this.cursor = new Cursor({game: this});
     this.welcome();
 }
@@ -45,6 +49,11 @@ Game.prototype.welcome = function(){
             highScoresList.appendChild(newLi);
         })
     }
+    this.bullets = [];
+    this.cities = [];
+    this.towers = [];
+    this.explosions = [];
+    this.enemies = [];
     this.enemySpawn = setInterval(this.addEnemy.bind(this), 1500);
     this.started = false;
     this.over = false;
@@ -154,19 +163,22 @@ Game.prototype.draw = function(){
     });
 
     if(!this.started){
-        this.ctx.drawImage(this.logo, 186, 0, 372, 230);
+        this.ctx.drawImage(this.logo, 150, 0, 440, 210);
         this.ctx.font = "24px serif";
         this.ctx.fillStyle = ["#f58800", "#f58800", "#f58800", "#ff4400", "#e37600"][Math.floor(Math.random()*5)];
-        this.ctx.fillText("Click Anywhere to Begin", 246, 220);
+        this.ctx.fillText("Press Fire to Begin", 280, 240);
+
+        this.ctx.drawImage(this.mc, 100, 260, 198, 135);
+        this.ctx.drawImage(this.kc, 400, 260, 198, 135);
     };
 
     if(this.over && this.started){
         this.ctx.font = "24px serif";
         this.ctx.fillStyle = ["#f58800", "#ff4400", "#ff4400", "#ff4400", "#e37600"][Math.floor(Math.random()*5)];
-        this.ctx.fillText("Game Over! Click to try again.", 220, 220);
+        this.ctx.fillText("Game Over! Press Fire to try again.", 220, 220);
         let highscores = JSON.parse(window.localStorage['highscores']);
-        if((highscores.some((score) => this.score > score) || highscores.length===0) && this.score > 0){
-            this.ctx.fillStyle = ["#e5f800", "#eeff00", "#ff4400", "#ff4400", "#e39600"][Math.floor(Math.random()*5)];
+        if((highscores.some((score) => this.score > score) || highscores.length<5) && this.score > 0){
+            this.ctx.fillStyle = ["#e5f800", "#eeff00", "#00ff00", "#ff4400", "#e39600"][Math.floor(Math.random()*5)];
             this.ctx.fillText("New High Score!", 230, 260);
         }
 

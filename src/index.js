@@ -148,24 +148,29 @@ addEventListener("DOMContentLoaded", () => {
             if (keyboardControl && ["d", "ArrowRight"].includes(event.key) && rightDown === false){
                 event.preventDefault();
                 rightDown = true;
-                right = setInterval(() => {game.cursor.pos[0] += 6}, 30);
+                right = setInterval(() => {game.cursor.pos[0] += 1}, 30);
             }
             if (keyboardControl && ["a", "ArrowLeft"].includes(event.key) && leftDown === false){
                 event.preventDefault();
                 leftDown = true;
-                left = setInterval(() => {game.cursor.pos[0] -= 6}, 30);
+                left = setInterval(() => {game.cursor.pos[0] -= 1}, 30);
             }
             if (keyboardControl && ["w", "ArrowUp"].includes(event.key) && upDown === false){
                 event.preventDefault();
                 upDown = true;
-                up = setInterval(() => {game.cursor.pos[1] -= 6}, 30);
+                up = setInterval(() => {game.cursor.pos[1] -= 1}, 30);
             }
             if (keyboardControl && ["s", "ArrowDown"].includes(event.key) && downDown === false){
                 event.preventDefault();
                 downDown = true;
-                down = setInterval(() => {game.cursor.pos[1] += 6}, 30);
+                down = setInterval(() => {game.cursor.pos[1] += 1}, 30);
+            }
+            if (keyboardControl && event.key == " "){
+                game.cursor.fire();
             }
         });
+
+
         window.addEventListener('keyup', (event) => {
             if (keyboardControl && ["d", "ArrowRight"].includes(event.key)){
                 rightDown = false;
@@ -183,11 +188,6 @@ addEventListener("DOMContentLoaded", () => {
                 downDown = false;
                 clearInterval(down);
             }
-            window.addEventListener('keypress', (event) => {
-                if (keyboardControl && event.key == " "){
-                    game.cursor.fire();
-                }
-            });
         });
     };
 

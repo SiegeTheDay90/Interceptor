@@ -16,7 +16,7 @@ const Bullet = function(options){
     let cursorPos = this.game.cursor.pos;
     let diffs = [cursorPos[0] - this.pos[0], cursorPos[1] - this.pos[1]];
     this.angle = [Math.atan(diffs[1]/diffs[0])];
-    this.terminus = cursorPos;
+    this.terminus = options.terminus;
 
     //Used for moving and drawing
     let movefix = diffs[0] < 0 ? -8 : 8;
@@ -41,7 +41,8 @@ Bullet.prototype.draw = function (ctx){
 Bullet.prototype.move = function (delta){
     this.pos = [this.pos[0] + this.vel[0]*delta, this.pos[1] + this.vel[1]*delta];
 
-    if (Math.abs(this.pos[0] - this.terminus[0]) < 5 && Math.abs(this.pos[1] - this.terminus[1] < 5)){
+    // if (Math.abs(this.pos[0] - this.terminus[0]) < 5 && Math.abs(this.pos[1] - this.terminus[1] < 5)){
+    if (this.distanceFrom(this.terminus) < 5){
         this.destroy();
         this.game.explosions.push(new Explosion({pos: this.pos, game: this.game}));
     }
