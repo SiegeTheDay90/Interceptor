@@ -39,10 +39,16 @@ Bullet.prototype.draw = function (ctx){
 }
 
 Bullet.prototype.move = function (delta){
+    console.log(this.terminus);
     this.pos = [this.pos[0] + this.vel[0]*delta, this.pos[1] + this.vel[1]*delta];
 
+    // if(this.pos[0] < 0 || this.pos[1] < 0){
+    //     debugger;
+    // }
+
     // if (Math.abs(this.pos[0] - this.terminus[0]) < 5 && Math.abs(this.pos[1] - this.terminus[1] < 5)){
-    if (this.distanceFrom(this.terminus) < 5){
+    if (this.distanceFrom(this.terminus) < 10){
+        console.log(this.distanceFrom(this.terminus));
         this.destroy();
         this.game.explosions.push(new Explosion({pos: this.pos, game: this.game}));
     }

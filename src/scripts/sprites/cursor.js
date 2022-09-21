@@ -22,12 +22,12 @@ Cursor.prototype.draw = function(ctx){
 }
 
 Cursor.prototype.fire = function(){
-    if(this.game.started && this.canFire && this.pos[1] < 395){
-        this.game.bullets.push(new Bullet({game: this.game, terminus: this.pos}));
+    if(this.game.started && this.canFire && this.pos[1] < 400){
         this.canFire = false;
-        setTimeout(() => {this.canFire = true}, 750);
+        this.game.bullets.push(new Bullet({game: this.game, terminus: this.pos}));
+        setTimeout(() => {this.canFire = true}, 28000/this.game.speed);
     }
-    if(!this.game.started && !this.game.over){
+    if(!this.game.started){
         this.game.setupGame();
     }
     if(this.game.over && this.game.started){

@@ -8,8 +8,9 @@ const ZigZag = function(options){
     this.type = "enemy";
     this.radius = 2;
     this.vel = options.vel;
-    this.colors = ["#FFa0a0", "#FF3030"];
+    this.colors = ["#FFa0a0", "#FF3030", "#FFFFFF"];
     this.game = options.game;
+    this.canChangeDir = true;
     
     
 }
@@ -19,7 +20,7 @@ Util.inherits(ZigZag, Enemy);
 
 ZigZag.prototype.destroy = function(){
     if (this.pos[1] < 395 && !this.game.over && this.game.started){
-        this.game.score += 75;
+        this.game.score += 50;
         document.getElementById('hud-score').innerHTML = `Score: ${this.game.score}`;
     }
     this.game.remove(this);
@@ -39,7 +40,9 @@ ZigZag.prototype.draw = function (ctx){
 ZigZag.prototype.move = function(delta){
     let changeDir = Math.random();
 
-    if (changeDir > 0.99){
+    if (changeDir > 0.8 && this.canChangeDir){
+        this.canChangeDir = false;
+        setTimeout(()=>{this.canChangeDir = true}, 1500)
         let friendlies = this.game.friendlyObjects();
         let targetPos;
         try{
@@ -51,7 +54,7 @@ ZigZag.prototype.move = function(delta){
         //Calculate angle from spawn to target # # # # # # # # # # # # # # # #
         let diffs = [targetPos[0] - this.pos[0], targetPos[1] - this.pos[1]];
         let angle = [Math.atan(diffs[1]/diffs[0])];
-        let movefix = diffs[0] < 0 ? -1 : 1;
+        let movefix = diffs[0] < 0 ? -4 : 4;
         this.vel = [movefix*Math.cos(angle), movefix*Math.sin(angle)];
     }
 

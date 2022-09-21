@@ -2,7 +2,7 @@ const GameView = function (game, ctx){
   this.game = game;
   this.ctx = ctx;
   this.lastTime = 0;
-  this.speed = 20;
+  this.speed = 40;
   this.hudLives = document.getElementById('hud-lives');
 }
 

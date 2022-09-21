@@ -115,6 +115,7 @@ addEventListener("DOMContentLoaded", () => {
 
             speedometer.innerText = ["►","►►","►►►","►►►►"][speed];
             canvasEl.gameView.speed = speeds[speed];
+            canvasEl.gamView.game.speed = speeds[speed];
         })
     });
 
@@ -122,7 +123,8 @@ addEventListener("DOMContentLoaded", () => {
     function setMouseListeners(){
         gameContainer.addEventListener('mousemove', (event) => {
             if(mouseControl){
-                game.cursor.pos = [event.clientX - canvasEl.getBoundingClientRect().left, event.clientY - canvasEl.getBoundingClientRect().top]
+                game.cursor.pos = [event.clientX - canvasEl.getBoundingClientRect().left, Math.floor(event.clientY - canvasEl.getBoundingClientRect().top)]
+                // console.log(game.cursor.pos);
             }
         });
     
@@ -143,27 +145,26 @@ addEventListener("DOMContentLoaded", () => {
         let rightDown = false;
         let upDown = false;
         let downDown = false;
-        let fireDown = false;
         window.addEventListener('keydown', (event) => {
             if (keyboardControl && ["d", "ArrowRight"].includes(event.key) && rightDown === false){
                 event.preventDefault();
                 rightDown = true;
-                right = setInterval(() => {game.cursor.pos[0] += 1}, 30);
+                right = setInterval(() => {game.cursor.pos = [game.cursor.pos[0] + 5, game.cursor.pos[1]]}, 30);
             }
             if (keyboardControl && ["a", "ArrowLeft"].includes(event.key) && leftDown === false){
                 event.preventDefault();
                 leftDown = true;
-                left = setInterval(() => {game.cursor.pos[0] -= 1}, 30);
+                left = setInterval(() => {game.cursor.pos = [game.cursor.pos[0] - 5, game.cursor.pos[1]]}, 30);
             }
             if (keyboardControl && ["w", "ArrowUp"].includes(event.key) && upDown === false){
                 event.preventDefault();
                 upDown = true;
-                up = setInterval(() => {game.cursor.pos[1] -= 1}, 30);
+                up = setInterval(() => {game.cursor.pos = [game.cursor.pos[0], game.cursor.pos[1] - 5]}, 30);
             }
             if (keyboardControl && ["s", "ArrowDown"].includes(event.key) && downDown === false){
                 event.preventDefault();
                 downDown = true;
-                down = setInterval(() => {game.cursor.pos[1] += 1}, 30);
+                down = setInterval(() => {game.cursor.pos = [game.cursor.pos[0], game.cursor.pos[1] + 5]}, 30);
             }
             if (keyboardControl && event.key == " "){
                 game.cursor.fire();
