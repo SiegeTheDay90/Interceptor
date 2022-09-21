@@ -1,0 +1,173 @@
+* {
+    font-family: Helvetica;
+}
+
+html {background: #051821}
+
+h1 {
+    font-size: 36px;
+    font-weight: 700;
+}
+
+#game-container {
+    background: #051821;
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    color: #266867;
+}
+
+canvas {
+    border-radius: 25px;
+    user-select: none;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+}
+
+h3, h4 {
+        color: #f58800;
+        margin: 10% 0 5% 0;
+}
+
+
+/* HUD Styles ----------------------------------------------------------------------- */
+.game-hud {
+    background: #1A4645;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: bold;
+    color: #f58800;
+}
+
+#hud-score{
+    width: 200px;
+    text-align: left;
+}
+
+#hud-spacer {
+    width: 15%;
+}
+#hud-lives {
+    padding-left: 50px;
+}
+
+
+
+/* Header Styles---------------------------------------------------------------------- */
+.header-logo {
+    height: 75px;
+    width: 75px;
+}
+
+.contact-link {
+    padding: 5px 10px 5px 10px;
+}
+.contact-link:hover {
+    font-weight: bolder;
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-left: 25px;
+    padding-right: 25px;
+    background:#051821;
+    color: #1A4645;
+}
+
+
+/* Settings Styles -------------------------------------------------------------------- */
+.settings {
+    color: #FBBC24;
+    margin-left: 15px;
+}
+
+.settings > div, .settings > div > form input {
+    margin-left: 15px;
+    padding-right: 10px;
+    margin-bottom: 10px;
+}
+
+.settings > div, .settings > div > #speedometer {
+    margin-left: 15px;
+    margin-bottom: 10px;
+}
+
+.speed-button, .display-button, .control-button {
+    background-color: #1A4645;
+    border-width: 0;
+    width: 80px;
+    color: inherit;
+    cursor: pointer;
+    border-radius: 8px;
+}
+
+
+
+.speed-button:disabled, .display-button:disabled, .control-button:disabled {
+    background-color: #053030;
+    color: #BB7C00;
+    border-radius: 8px;
+}
+
+#speedometer {
+    
+    width: 70px;
+    text-align: center;
+    padding: 3px;
+    padding-left: 7px;
+    background: #BB7C00;
+    color: #1A6665;
+    border-radius: 5px;
+    font-size: 12px;
+    font-family: Helvetica;
+}
+
+/* High Scores styling -------------------------------------------------------------- */
+
+/* #high-scores-list {
+    list-style: none;
+    counter-reset: rank;
+}
+
+#high-scores-list li::before {
+    content: counter(rank);
+    color: #1A6665;
+    display: inline-block;
+    width: 1.5em;
+    margin-left: -2em;
+} */
+
+#high-scores-list li::marker {
+    color: #1A6665;
+    font-weight: 900;
+}
+
+#high-scores-list li {
+    color:#BB7C00;
+    line-height: 1.5em;
+    font-weight: 700;
+    counter-increment: rank;
+}
+
+.clear-button {
+    background-color: #1A4645;
+    border-width: 0;
+    width: 85px;
+    color: #BB7C00;
+    cursor: pointer;
+    border-radius: 8px;
+}
+
+.confirm-button {
+    color: #053030;
+    background-color: #BB7C00;
+    width: 85px;
+    cursor: pointer;
+    border-radius: 8px;
+}
