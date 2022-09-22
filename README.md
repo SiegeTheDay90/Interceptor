@@ -1,7 +1,7 @@
 # Interceptor
 ## [URL](https://siegetheday90.github.io/Interceptor/): https://siegetheday90.github.io/Interceptor/
 
-![logo](https://raw.githubusercontent.com/SiegeTheDay90/Interceptor/main/images/logo.png)
+<img src="https://raw.githubusercontent.com/SiegeTheDay90/Interceptor/main/images/logo.png" width = "350px">
 
 ## Description
 Interceptor is a point and click shooter where you attempt to stop enemies and projectiles before they collide with buildings on the ground. Beginners often aim directly at their target, but you will realize that you must shoot ***in front*** of enemies to destroy them.
