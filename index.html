@@ -50,11 +50,21 @@
 
         <canvas style ='cursor: none; margin-top: 30px' id = "game-canvas"></canvas>        
         
-        <section class='high-scores' style="margin-left: 30px">
-            <h3>High Scores</h3>
-            <ol id ='high-scores-list'>
-            </ol>
-            <button id="clear-high-scores" value="clear" class="clear-button">Clear Local Scores</button>
+        <section class='right-container' style="margin-left: 30px">
+            <div class="high-scores">
+                <h3>High Scores</h3>
+                <ol id ='high-scores-list'>
+                </ol>
+                <button id="clear-high-scores" value="clear" class="clear-button">Clear Local Scores</button>
+            </div>
+            <h3>Instructions</h3>
+            <div class='instructions'>
+                Shoot enemies from the sky! Make sure to aim <i style="color:#BB7C00">ahead</i> of enemies so they are caught in the explosion of your missile!
+                <hr style="border:1px solid #BB7C00">
+                Your missles are designed to detonate at the chosen point. <br>They <i style="color:#BB7C00">will not</i> impact enemies!<hr style="border:1px solid #BB7C00">
+                You have four buildings to protect. You can only fire <i style="color:#BB7C00">above</i> the buildings!<hr style="border:1px solid #BB7C00">
+                There are <b style="color:#BB7C00">10</b> intensity levels. How long can you survive?
+            </div>
         </section>
     </div>
 </body>

@@ -130,19 +130,6 @@ header {
 
 /* High Scores styling -------------------------------------------------------------- */
 
-/* #high-scores-list {
-    list-style: none;
-    counter-reset: rank;
-}
-
-#high-scores-list li::before {
-    content: counter(rank);
-    color: #1A6665;
-    display: inline-block;
-    width: 1.5em;
-    margin-left: -2em;
-} */
-
 #high-scores-list li::marker {
     color: #1A6665;
     font-weight: 900;
@@ -162,6 +149,7 @@ header {
     color: #BB7C00;
     cursor: pointer;
     border-radius: 8px;
+    font-weight: 700;
 }
 
 .confirm-button {
@@ -170,4 +158,16 @@ header {
     width: 85px;
     cursor: pointer;
     border-radius: 8px;
+    font-weight: 700;
+}
+
+/* Instructions ------------------------------------------------------------ */
+.instructions {
+    border: 2px solid #BB7C00;
+    border-radius: 8px;
+    padding: 10px;
+    width: 250px;
+    height: 250px;
+    margin-top: 10px;
+    font-size: 14px;
 }
