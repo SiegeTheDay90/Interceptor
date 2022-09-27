@@ -9,7 +9,6 @@
         <link rel="shortcut icon" type="image/jpg" href="images/logo-no-text.png"/>
         <title>Intercept⌖r</title>
         <script src="https://kit.fontawesome.com/a65848e44c.js" crossorigin="anonymous"></script>
-        <link rel="stylesheet" href="reset.css">
         <link rel="stylesheet" href="./styles/index.css">
         <script src="main.js"></script>
     </head>
@@ -52,8 +51,11 @@
         <canvas style ='cursor: none; margin-top: 30px' id = "game-canvas"></canvas>        
         
         <section class='right-container' style="margin-left: 30px">
-            <div class="high-scores">
-                <h3>High Scores</h3>
+            <h3>High Scores</h3>
+            <span id="local" class = 'high-score-selector active'>Local</span> | 
+            <span id="global" class= 'high-score-selector inactive'>Global</span>
+
+            <div class="high-scores-local">
                 <ol id ='high-scores-list'>
                 </ol>
                 <button id="clear-high-scores" value="clear" class="clear-button">Clear Local Scores</button>
