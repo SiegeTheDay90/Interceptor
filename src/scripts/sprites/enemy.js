@@ -66,7 +66,7 @@ Enemy.prototype.draw = function (ctx){
 }
 
 Enemy.prototype.move = function(delta){
-    MovingObject.prototype.move.call(this, delta);
+    MovingObject.prototype.move.call(this, delta*2.1);
     this.angle = (this.angle + this.angularMomentum)%(Math.PI*2)
     if(this.pos[1] > 495){
         this.destroy();

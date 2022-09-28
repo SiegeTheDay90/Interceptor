@@ -1,4 +1,50 @@
+// Import the functions you need from the SDKs you need
+import { initializeApp } from "firebase/app";
+import { getDocs, getFirestore, query } from "firebase/firestore";
+import { collection, addDoc, doc } from "firebase/firestore"; 
+
+
+
 addEventListener("DOMContentLoaded", () => {
+    // TODO: Add SDKs for Firebase products that you want to use
+    // https://firebase.google.com/docs/web/setup#available-libraries
+
+    // Your web app's Firebase configuration
+    const firebaseConfig = {
+        apiKey: "AIzaSyC9IZALLfddiXJzq8A4ozM320XrkF4ypOM",
+        authDomain: "interceptor-69b21.firebaseapp.com",
+        projectId: "interceptor-69b21",
+        storageBucket: "interceptor-69b21.appspot.com",
+        messagingSenderId: "104049209361",
+        appId: "1:104049209361:web:595773401aaa7933e3c1b0"
+    };
+    
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+ 
+    
+    
+    const sendScore = async function(name, highscore) {
+        
+        await addDoc(collection(db, "scores"),{
+            name: name,
+            score: highscore
+
+        })
+    }
+        
+    const getScores = async function(){
+        let ref = collection(db,"scores");
+        const querySnapshot = await getDocs(ref);
+        let arr = [];
+        querySnapshot.forEach( (ele) => {
+            arr.push(ele.data());
+        })
+        return arr;
+    }
+
+    
     const Game = require("./scripts/game.js");
     const GameView = require("./scripts/game_view.js");
 
@@ -28,6 +74,21 @@ addEventListener("DOMContentLoaded", () => {
         newLi.innerText = `${score}`;
         highScoresList.appendChild(newLi);
     });
+
+    // const highScoreSelectors = document.getElemetsByClassName('high-score-selector');
+
+    // highScoreSelectors.forEach((button) => {
+    //     button.addEventListener('click', (event) => {
+    //         event.preventDefault();
+
+    //         if(event.target.classList.includes("inactive")){
+    //             let self = document.getElementById(event.target.id);
+    //             self.classList.toggle('active');
+    //             self.classList.toggle('inactive');
+                
+    //         }
+    //     })
+    // })
 
     const clearScoresButton = document.getElementById('clear-high-scores');
 
@@ -181,5 +242,7 @@ addEventListener("DOMContentLoaded", () => {
     setMouseListeners();
     setKeyboardListeners();
 
+    game.sendScore = sendScore;
+    game.getScores = getScores;
     canvasEl.gameView.start();
 });

@@ -95,8 +95,6 @@ Game.prototype.setupGame = function(){
     }
     this.enemySpawnInterval(this.speed, this.intensity);
 
-    this.enemies.push(new Teleporter({game: this, vel: [0, 0], pos: [Math.floor(Math.random()*600+100),-100]}));
-
     this.towers = [new Tower({game: this})];
     this.cities = [
         new City({game: this, pos: [75, 475]}), 
@@ -124,19 +122,10 @@ Game.prototype.setupGame = function(){
 }
 
 Game.prototype.addEnemy = function(enemyType){
-    let friendlies = this.friendlyObjects().filter(object => object.destroyed === false);
-    let targetPos;
-    try{
-        targetPos = friendlies[Math.floor(Math.random()*friendlies.length)].pos;
-    } catch {
-        targetPos = [375, 400];
-    }
-    
+  
+    let targetPos = Util.chooseTarget(this);
     let spawnPos = Util.spawn("enemy");
-    let diffs = [targetPos[0] - spawnPos[0], targetPos[1] - spawnPos[1]];
-    let angle = [Math.atan(diffs[1]/diffs[0])];
-    let movefix = diffs[0] < 0 ? -2 : 2;
-    let vel = [movefix*Math.cos(angle), movefix*Math.sin(angle)];
+    let vel = Util.angleTo(spawnPos, targetPos);
 
     enemyType = enemyType || Math.random() + this.intensity*0.03;
 
@@ -266,5 +255,7 @@ Game.prototype.remove = function(object){
         this.cities = this.cities.filter(item => item != object);
     }
 }
+
+
 
 module.exports = Game;

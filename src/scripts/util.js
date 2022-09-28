@@ -6,19 +6,6 @@ const Util = {
         childClass.prototype.constructor = childClass;
     },
     
-    // Return a randomly oriented vector with the given length.
-    randomFallingVec: function randomFallingVec(length) {
-        const deg = Math.PI * (1/4)+ Math.PI * 0.5 * Math.random();
-        return Util.scale([Math.cos(deg), Math.sin(deg)], length);
-    },
-
-
-
-    // Scale the length of a vector by the given amount.
-    scale: function scale(vec, m) {
-        return [vec[0] * m, vec[1] * m];
-    },
-
     spawn: function spawn(type){
         type = type || "enemy";
         
@@ -39,7 +26,31 @@ const Util = {
         ctx.lineTo(x + radius, y);
         ctx.arcTo(x, y, x, y + radius, radius);
         ctx.fill();
-      }
+    },
+
+    angleTo: function(startPoint, endPoint, speed){
+        speed = speed || 1;
+        let targetPos = endPoint.pos || endPoint;
+        let startPos = startPoint.pos || startPoint;
+        let diffs = [targetPos[0] - startPos[0], targetPos[1] - startPos[1]];
+        let angle = [Math.atan(diffs[1]/diffs[0])];
+        let dirFix = diffs[0] < 0 ? -(speed) : speed;
+        let vel = [dirFix * Math.cos(angle), dirFix * Math.sin(angle)];
+
+        return vel;
+    },
+
+    chooseTarget: function(game){
+        let friendlies = game.friendlyObjects().filter(object => object.destroyed === false);
+        let targetPos;
+        try{
+            targetPos = friendlies[Math.floor(Math.random()*friendlies.length)].pos;
+        } catch {
+            targetPos = [375, 400];
+        }
+
+        return targetPos;
+    }
     
   };
 

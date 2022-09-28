@@ -21,24 +21,13 @@ Tower.prototype.draw = function (ctx){
     }
     this.angle = [Math.atan(diffs[1]/diffs[0])];
     let movefix = diffs[0] < 0 ? -1 : 1;
-
-    //Barrel
     ctx.beginPath();
     ctx.strokeStyle = "#a55f35";
     ctx.moveTo(this.pos[0]-1, this.pos[1]-105);
     ctx.lineTo(this.pos[0] + movefix*20*Math.cos(this.angle), this.pos[1]-105 + movefix*20*Math.sin(this.angle));
     ctx.lineWidth = 5;
     ctx.stroke();
-
-    //Base
     ctx.drawImage(this.sprite, this.pos[0]-37, this.pos[1], 75, -125);
-    // ctx.fillStyle = this.colors[0];
-    // ctx.fillRect(this.pos[0] - 10, this.pos[1], 20, 35);
-
-    // //Dome
-    // ctx.beginPath();
-    // ctx.arc(this.pos[0], this.pos[1], 8, 0, Math.PI, true)
-    // ctx.fill();
 }
 
 

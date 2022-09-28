@@ -42,22 +42,11 @@ ZigZag.prototype.move = function(delta){
     if (changeDir > 0.8 && this.canChangeDir && this.pos[1] < 200){
         this.canChangeDir = false;
         setTimeout(()=>{this.canChangeDir = true}, 1500/(40/this.game.speed))
-        let friendlies = this.game.friendlyObjects().filter(object => object.destroyed === false);
-        let targetPos;
-        try{
-            targetPos = friendlies[Math.floor(Math.random()*friendlies.length)].pos;
-        } catch {
-            targetPos = [375, 400];
-        }
-            
-        //Calculate angle from spawn to target # # # # # # # # # # # # # # # #
-        let diffs = [targetPos[0] - this.pos[0], targetPos[1] - this.pos[1]];
-        let angle = [Math.atan(diffs[1]/diffs[0])];
-        let movefix = diffs[0] < 0 ? -4 : 4;
-        this.vel = [movefix*Math.cos(angle), movefix*Math.sin(angle)];
+        let targetPos = Util.chooseTarget(this.game);
+        this.vel = Util.angleTo(this, targetPos);
     }
 
-    Enemy.prototype.move.call(this, delta/2);
+    Enemy.prototype.move.call(this, delta/1.5);
 }
 
 

@@ -20,7 +20,7 @@ Missile.prototype.destroy = function(){
 }
 
 Missile.prototype.move = function(delta){
-    MovingObject.prototype.move.call(this, delta*3.5);
+    MovingObject.prototype.move.call(this, delta*2.8);
     if(this.pos[1] > 495){
         this.destroy();
     }

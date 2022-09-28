@@ -80,7 +80,7 @@ Teleporter.prototype.teleport = function(){
     this.teleportStep = 0;
     if (this.game.started && this.game.soundOn){
         let sound = new Audio('./sounds/teleport-1.wav');
-        sound.volume = 0.05;
+        sound.volume = 0.1;
         sound.play();
     }
     setTimeout(() => {this.canTeleport = true}, 3000/(40/this.game.speed))
@@ -102,19 +102,8 @@ Teleporter.prototype.move = function(){
 
 Teleporter.prototype.attack = function(){
     this.canAttack = false;
-    let friendlies = this.game.friendlyObjects().filter(object => object.destroyed === false);
-    let targetPos;
-    try{
-        targetPos = friendlies[Math.floor(Math.random()*friendlies.length)].pos;
-    } catch {
-        targetPos = [375, 400];
-    }
-
-    let diffs = [targetPos[0] - this.pos[0], targetPos[1] - this.pos[1]];
-    let angle = [Math.atan(diffs[1]/diffs[0])];
-    let movefix = diffs[0] < 0 ? -1 : 1;
-    let vel = [movefix*Math.cos(angle), movefix*Math.sin(angle)];
-
+    let targetPos = Util.chooseTarget(this.game);
+    let vel = Util.angleTo(this, targetPos, 1.3);
     this.game.enemies.push(new Missile({game: this.game, pos: this.pos, vel: vel}))
     setTimeout(()=>{this.canAttack = true}, 4000/(40/this.game.speed));
 }

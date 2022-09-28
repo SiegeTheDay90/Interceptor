@@ -6,12 +6,9 @@ const Bullet = function(options){
     this.pos = [375, 395];
     this.radius = 1.5;
     this.game = options.game;
-    let cursorPos = this.game.cursor.pos;
-    let diffs = [cursorPos[0] - this.pos[0], cursorPos[1] - this.pos[1]];
-    this.angle = [Math.atan(diffs[1]/diffs[0])];
     this.terminus = options.terminus;
-    let movefix = diffs[0] < 0 ? -1 : 1;
-    this.vel = [movefix * Math.cos(this.angle), movefix * Math.sin(this.angle)];
+    let cursorPos = this.game.cursor.pos;
+    this.vel = Util.angleTo(this, cursorPos);
     this.colors = ["#ff8800", "#ff0000","#ff0000", "#ff0000"];
     this.type = "bullet";
 
