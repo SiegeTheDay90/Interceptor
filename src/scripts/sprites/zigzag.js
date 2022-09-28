@@ -46,7 +46,7 @@ ZigZag.prototype.move = function(delta){
         this.vel = Util.angleTo(this, targetPos);
     }
 
-    Enemy.prototype.move.call(this, delta/1.5);
+    Enemy.prototype.move.call(this, delta/0.95);
 }
 
 
