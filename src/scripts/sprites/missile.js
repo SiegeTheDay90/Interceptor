@@ -9,12 +9,12 @@ const Missile = function(options){
     this.vel = options.vel;
     this.color = "#e04040";
     this.game = options.game;
-    this.scoreValue = 10;
+    this.scoreValue = options.scoreValue || 10;
 }
 Util.inherits(Missile, MovingObject);
 
 Missile.prototype.destroy = function(){
-    if (this.pos[1] < 395 && !this.game.over && this.game.started){this.game.score += 20};
+    if (this.pos[1] < 395 && !this.game.over && this.game.started){this.game.score += this.scoreValue};
     this.game.remove(this);
     this.game.explosions.push(new Explosion({game: this.game, pos: this.pos}));
 }

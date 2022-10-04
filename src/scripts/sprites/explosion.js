@@ -33,7 +33,7 @@ Explosion.prototype.draw = function (ctx){
 
 
 Explosion.prototype.expand = function (){
-    this.lifeTime += 1;
+    this.lifeTime += 1/(this.game.speed/40);
     if (!this.contract){
         this.radius = -1/(1.07**(this.lifeTime - 50)) + 30;
         if (this.radius >= 29.74) {this.contract = true}

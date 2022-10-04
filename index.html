@@ -48,14 +48,13 @@
             </div>
         </section>
 
-        <canvas style ='cursor: none; margin-top: 30px' id = "game-canvas"></canvas>        
+        <section><canvas style ='cursor: none; margin-top: 30px' id = "game-canvas"></canvas></section>    
         
         <section class='right-container' style="margin-left: 30px">
             <h3>High Scores</h3>
-            <span id="local" class = 'high-score-selector active'>Local</span> | 
-            <span id="global" class= 'high-score-selector inactive'>Global</span>
+            <span id="high-scores-title">Local Leaderboard</span> &nbsp; <button id="high-score-selector" class="local">Show Global</button>
 
-            <div class="high-scores-local">
+            <div class="high-scores">
                 <ol id ='high-scores-list'>
                 </ol>
                 <button id="clear-high-scores" value="clear" class="clear-button">Clear Local Scores</button>

@@ -9,7 +9,7 @@ const Teleporter = function(options){
     this.type = "enemy";
     this.radius = 10;
     this.vel = options.vel || [1, 0];
-    this.colors = ["#969fff", "#a6afbc","#b6bffc", "#e6effc"];
+    this.colors = ["#eeeeff", "#ddecff","#dbdbfb", "#bed9fd", "#b7b7f7"];
     this.game = options.game;
     this.teleporting = false;
     this.canAttack = true;
@@ -38,10 +38,10 @@ Teleporter.prototype.draw = function (ctx){
         ctx.lineTo(this.pos[0], this.pos[1]-this.radius/2);
         ctx.lineTo(this.pos[0]-this.radius*2, this.pos[1]);
         ctx.closePath();
-        ctx.strokeStyle = this.colors[Math.floor(Math.random()*2)];
-        ctx.lineWidth = 2;
+        ctx.strokeStyle = this.colors[Math.floor(Math.random()*5)];
+        ctx.lineWidth = 1;
         ctx.stroke();
-        ctx.fillStyle = this.colors[Math.floor(Math.random()*2)]
+        ctx.fillStyle = this.colors[Math.floor(Math.random()*5)]
         ctx.fill();
     } else if(this.teleporting){
         this.teleportStep += 2;

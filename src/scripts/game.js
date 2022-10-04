@@ -1,6 +1,7 @@
 const Enemy = require("./sprites/enemy.js");
 const ZigZag = require("./sprites/zigzag.js");
 const Teleporter = require("./sprites/teleporter.js");
+const Boss = require("./sprites/big_boss.js");
 const City = require("./sprites/city.js");
 const Tower = require("./sprites/tower.js");
 const Cursor = require("./sprites/cursor.js");
@@ -20,6 +21,7 @@ const Game = function(ctx){
     this.towers = [];
     this.explosions = [];
     this.enemies = [];
+    this.bossSpawn = true;
     this.cursor = new Cursor({game: this});
     this.logo = new Image();
     this.logo.src = 'images/logo.png';
@@ -45,24 +47,6 @@ Game.prototype.welcome = function(){
     ];       
     this.over = false;
     this.started = false;
-    if (this.score > 0){
-        let highscores = JSON.parse(window.localStorage['highscores']);
-
-        highscores.push(this.score);
-        highscores.sort((f, s) => s - f);
-        highscores = highscores.slice(0, 5);
-
-        window.localStorage['highscores'] = JSON.stringify(highscores);
-
-        const highScoresList = document.getElementById('high-scores-list');      
-        highScoresList.innerHTML = "";     
-            
-        highscores.forEach((score) => {
-            let newLi = document.createElement("li");
-            newLi.innerText = `${score}`;
-            highScoresList.appendChild(newLi);
-        })
-    }
     this.bullets = [];
     this.towers = [];
     this.explosions = [];
@@ -72,6 +56,7 @@ Game.prototype.welcome = function(){
 
 Game.prototype.setupGame = function(){
     this.over = false;
+    this.bossSpawn = true;
     this.startTime = new Date();
     clearInterval(this.enemySpawn);
     this.started = true;
@@ -82,6 +67,7 @@ Game.prototype.setupGame = function(){
     this.towers = [];
     this.explosions = [];
     this.enemies = [];
+    this.newHighScore = false;
 
 
 
@@ -95,6 +81,7 @@ Game.prototype.setupGame = function(){
     }
     this.enemySpawnInterval(this.speed, this.intensity);
 
+    // this.enemies.push(new Boss({game: this, vel: [0, 0], pos: [Math.floor(Math.random()*600+100),-100]}))
     this.towers = [new Tower({game: this})];
     this.cities = [
         new City({game: this, pos: [75, 475]}), 
@@ -129,19 +116,31 @@ Game.prototype.addEnemy = function(enemyType){
 
     enemyType = enemyType || Math.random() + this.intensity*0.03;
 
+    if (this.intensity > 7 && this.bossSpawn){
+        this.bossSpawn = false;
+        this.enemies.push(new Boss({game: this, vel: [0, 0], pos: [Math.floor(Math.random()*600+100),-100]}));
+        setTimeout(()=>{this.bossSpawn = true}, 60000/(40/this.speed));
+    }
+
     if (this.canSpawn){
         this.canSpawn = false;
         if (enemyType > 0.85 && this.intensity > 6){
             this.enemies.push(new Teleporter({game: this, vel: [0, 0], pos: [Math.floor(Math.random()*600+100),-100]}));
-            setTimeout(()=>{this.canSpawn = true}, 5000/(40/this.speed)/(this.intensity/7));
+            setTimeout(()=>{this.canSpawn = true}, 8000/(40/this.speed)/(this.intensity/7));
         }
         else if (enemyType > 0.60 && this.intensity > 2){
             this.enemies.push(new ZigZag({game: this, vel: vel, pos: spawnPos}));
-            setTimeout(()=>{this.canSpawn = true}, 2500/(40/this.speed)/(this.intensity/3));
+            if(this.intensity > 4){
+                let spawnPos = Util.spawn("enemy");
+                let targetPos = Util.chooseTarget(this);
+                let vel = Util.angleTo(spawnPos, targetPos);
+                this.enemies.push(new Enemy({game: this, vel: vel, pos: spawnPos}));
+            }
+            setTimeout(()=>{this.canSpawn = true}, 4000/(40/this.speed)/(this.intensity/3));
 
         } else {
             this.enemies.push(new Enemy({game: this, vel: vel, pos: spawnPos}));
-            setTimeout(()=>{this.canSpawn = true}, 600/(40/this.speed))
+            setTimeout(()=>{this.canSpawn = true}, 700/(40/this.speed))
         }
     }
 }
@@ -155,6 +154,7 @@ Game.prototype.step = function(delta){
 Game.prototype.isOver = function(){
     if(this.cities.filter(object => object.destroyed === false).length === 0 && this.started){
         clearInterval(this.overCheck);
+        this.checkHighScore();
         setTimeout(() => {
             this.over = true; 
             clearInterval(this.enemySpawn)}, 1000);
@@ -222,8 +222,7 @@ Game.prototype.draw = function(){
         this.ctx.font = "24px serif";
         this.ctx.fillStyle = ["#f58800", "#ff4400", "#ff4400", "#ff4400", "#e37600"][Math.floor(Math.random()*5)];
         this.ctx.fillText("Game Over! Press Fire to try again.", 220, 220);
-        let highscores = JSON.parse(window.localStorage['highscores']);
-        if((highscores.some((score) => this.score > score) || highscores.length<5) && this.score > 0){
+        if(this.newHighScore){
             this.ctx.fillStyle = ["#e5f800", "#eeff00", "#00ff00", "#ff4400", "#e39600"][Math.floor(Math.random()*5)];
             this.ctx.fillText(`New High Score! ${this.score}`, 230, 260);
         }
@@ -235,6 +234,44 @@ Game.prototype.draw = function(){
     });
 
     this.cursor.draw(this.ctx);
+}
+
+Game.prototype.checkHighScore = async function(){
+    let localhighscores = JSON.parse(window.localStorage['highscores']);
+    let globalhighscores = (await this.getScores())
+                .map(ele => ({score: ele.score, name: ele.name}))
+                .sort((f, s) => s - f);
+    let check = {
+        local: ((localhighscores.some((score) => this.score > score.score) 
+        || localhighscores.length<5) 
+        && this.score > 0),
+        global: ((globalhighscores.slice(0,5).some((score) => this.score > score.score) 
+        || globalhighscores.length<5) 
+        && this.score > 0)
+    }
+
+    if (Object.values(check).some((value) => (value === true))){
+        let name = prompt('Enter a name to submit your score!');
+        if(name && check.local){
+            localhighscores.push({name: name, score: this.score});
+            localhighscores.sort((f, s) => s.score - f.score);
+            localhighscores = localhighscores.slice(0, 10);
+            window.localStorage['highscores'] = JSON.stringify(localhighscores);
+        }
+
+        if(name && check.global){
+            this.sendScore(name, this.score);
+        }
+
+        const highScoreSelector = document.getElementById('high-score-selector');
+
+        let type = highScoreSelector.className
+
+        buildHighScoreList(type);
+    }
+
+    this.newHighScore = Object.values(check).some(value => value === true)
+    return this.newHighScore
 }
 Game.prototype.allObjects = function(){
     return this.cities.concat(this.bullets.concat(this.explosions.concat(this.enemies.concat(this.towers))));
@@ -254,6 +291,26 @@ Game.prototype.remove = function(object){
     } else if (object.type === "city"){
         this.cities = this.cities.filter(item => item != object);
     }
+}
+
+const buildHighScoreList = async function(type){
+    type = type || 'local';
+    const highScoresList = document.getElementById('high-scores-list');
+    highScoresList.innerHTML = '';
+    let highScores;
+
+    if (type === 'local'){
+        highScores = JSON.parse(window.localStorage['highscores']);
+    } else {
+        highScores = (await getScores())
+            .sort((f, s) => s.score - f.score);
+    }
+    
+    highScores.slice(0,5).forEach((ele) => {
+        let newLi = document.createElement("li");
+        newLi.innerText = `${ele.name}: ${ele.score}`;
+        highScoresList.appendChild(newLi);
+    });
 }
 
 

@@ -4,7 +4,8 @@ const Util = require("../util.js");
 const Pop = function (options){
     this.pos = options.pos;
     this.type = "pop";
-    this.radius = 2;
+    this.radius = options.radius || 2;
+    this.max_radius = options.max_radius || 10;
     this.colors = ["#00aaaa", "#3333aa", "#1100aa"];
     this.game = options.game;
     if(this.game.started && this.game.soundOn){
@@ -24,7 +25,7 @@ Pop.prototype.draw = function (ctx){
 
 
 Pop.prototype.expand = function (delta){
-    if (this.radius >= 10) {this.destroy()}
+    if (this.radius >= this.max_radius) {this.destroy()}
     this.radius += 1*delta;
 }
 

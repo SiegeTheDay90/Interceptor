@@ -1,7 +1,7 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
-import { getDocs, getFirestore, query } from "firebase/firestore";
-import { collection, addDoc, doc } from "firebase/firestore"; 
+import { getDocs, getFirestore } from "firebase/firestore";
+import { collection, addDoc } from "firebase/firestore"; 
 
 
 
@@ -30,7 +30,6 @@ addEventListener("DOMContentLoaded", () => {
         await addDoc(collection(db, "scores"),{
             name: name,
             score: highscore
-
         })
     }
         
@@ -55,40 +54,51 @@ addEventListener("DOMContentLoaded", () => {
     let ctx = canvasEl.getContext('2d');
     const gameContainer = document.getElementById('game-container');
     const speedButtons = document.getElementsByClassName('speed-button');
-    const displayButtons = document.getElementsByClassName('display-button');
     const controlButtons = document.getElementsByClassName('control-button');
     const game = new Game(ctx);
     canvasEl.gameView = new GameView(game, ctx);
     
     if(!window.localStorage['highscores']){
-        window.localStorage['highscores'] = JSON.stringify([]);
+        window.localStorage['highscores'] = JSON.stringify([{name: 'Good', score: 100}, {name: 'Luck', score: 90}, {name: 'Your', score: 80}, {name: 'Name', score: 70}, {name: 'Here', score: 60}]);
     };
 
-    
+    const buildHighScoreList = async function(type){
+        type = type || 'local';
+        const highScoresList = document.getElementById('high-scores-list');
+        highScoresList.innerHTML = '';
+        let highScores;
 
-    const highScoresList = document.getElementById('high-scores-list');
-    let highscores = JSON.parse(window.localStorage['highscores']);
-    
-    highscores.forEach((score) => {
-        let newLi = document.createElement("li");
-        newLi.innerText = `${score}`;
-        highScoresList.appendChild(newLi);
-    });
+        if (type === 'local'){
+            highScores = JSON.parse(window.localStorage['highscores']);
+        } else {
+            highScores = (await getScores())
+                .sort((f, s) => s.score - f.score);
+        }
+        
+        highScores.slice(0,5).forEach((ele) => {
+            let newLi = document.createElement("li");
+            newLi.innerText = `${ele.name}: ${ele.score}`;
+            highScoresList.appendChild(newLi);
+        });
+    }
 
-    // const highScoreSelectors = document.getElemetsByClassName('high-score-selector');
+    buildHighScoreList();
 
-    // highScoreSelectors.forEach((button) => {
-    //     button.addEventListener('click', (event) => {
-    //         event.preventDefault();
+    const highScoreSelector = document.getElementById('high-score-selector');
 
-    //         if(event.target.classList.includes("inactive")){
-    //             let self = document.getElementById(event.target.id);
-    //             self.classList.toggle('active');
-    //             self.classList.toggle('inactive');
-                
-    //         }
-    //     })
-    // })
+    highScoreSelector.addEventListener('click', (event) => {
+        event.preventDefault();
+        if(event.target.className === 'local'){
+            event.target.innerHTML = 'Show Local';
+            document.getElementById('high-scores-title').innerHTML = 'Global Leaderboard';
+        } else {
+            event.target.innerHTML = 'Show Global';
+            document.getElementById('high-scores-title').innerHTML = 'Local Leaderboard';
+        }
+        event.target.classList.toggle('local');
+        event.target.classList.toggle('global');
+        buildHighScoreList(event.target.className);
+    })
 
     const clearScoresButton = document.getElementById('clear-high-scores');
 
@@ -171,9 +181,10 @@ addEventListener("DOMContentLoaded", () => {
         gameContainer.addEventListener('mousemove', (event) => {
             if(mouseControl){
                 game.cursor.pos = [event.clientX - canvasEl.getBoundingClientRect().left, Math.floor(event.clientY - canvasEl.getBoundingClientRect().top)]
-                // console.log(game.cursor.pos);
             }
         });
+
+        canvasEl.addEventListener('touchmove', (event) => {event.preventDefault()})
     
         canvasEl.addEventListener('click', (event) => {
             if(mouseControl){
@@ -187,7 +198,6 @@ addEventListener("DOMContentLoaded", () => {
         let right;
         let up;
         let down;
-        let fire;
         let leftDown = false;
         let rightDown = false;
         let upDown = false;
@@ -214,6 +224,7 @@ addEventListener("DOMContentLoaded", () => {
                 down = setInterval(() => {game.cursor.pos = [game.cursor.pos[0], game.cursor.pos[1] + 8]}, 30);
             }
             if (keyboardControl && event.key == " "){
+                event.preventDefault();
                 game.cursor.fire();
             }
         });

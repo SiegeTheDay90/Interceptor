@@ -20,8 +20,12 @@ h1 {
     color: #266867;
 }
 
-canvas {
+#game-canvas {
     border-radius: 25px;
+    height: 100%;
+    width: 100%;
+    max-height: 500px;
+    max-width: 750px;
     user-select: none;
     -moz-user-select: none;
     -webkit-user-select: none;
@@ -137,21 +141,13 @@ header {
 
 /* High Scores styling -------------------------------------------------------------- */
 
-.high-scores-local {
-    display: block;
-    border: 1px solid red;
-}
-
-.high-scores-global {
-    display: hidden;
-    border: 1px solid blue;
-}
-
 #high-scores-list li::marker {
     color: #1A6665;
     font-weight: 900;
 }
-
+#high-scores-title {
+    font-weight: bold;
+}
 #high-scores-list li {
     color:#BB7C00;
     line-height: 1.5em;
@@ -159,14 +155,16 @@ header {
     counter-increment: rank;
 }
 
-.high-score-selector {
+#high-score-selector {
+    background-color: #1A4645;
+    border-width: 0;
+    width: 95px;
     color: #BB7C00;
     cursor: pointer;
+    border-radius: 8px;
+    font-weight: 700;
 }
 
-.active {
-    font-weight: bolder;
-}
 
 .clear-button, .high-score-swap-button {
     background-color: #1A4645;
@@ -192,8 +190,8 @@ header {
     border: 2px solid #BB7C00;
     border-radius: 8px;
     padding: 10px;
-    width: 250px;
-    height: 250px;
+    max-width: 250px;
+    max-height: 250px;
     margin-top: 10px;
-    font-size: 14px;
+    font-size: 11px;
 }
