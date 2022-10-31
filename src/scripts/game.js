@@ -251,17 +251,35 @@ Game.prototype.checkHighScore = async function(){
     }
 
     if (Object.values(check).some((value) => (value === true))){
-        let name = prompt('Enter a name to submit your score!');
-        if(name && check.local){
-            localhighscores.push({name: name, score: this.score});
-            localhighscores.sort((f, s) => s.score - f.score);
-            localhighscores = localhighscores.slice(0, 10);
-            window.localStorage['highscores'] = JSON.stringify(localhighscores);
-        }
+        const highScoreDialog = document.getElementById('high-score-dialog');
+        const nameInput = document.getElementById('high-score-name');
+        const submitHighScore = document.getElementById('submit-high-score');
+        submitHighScore.disabled = true;
 
-        if(name && check.global){
-            this.sendScore(name, this.score);
-        }
+        nameInput.addEventListener('change', (e) =>{
+            if (e.target.value.length > 2){
+                submitHighScore.disabled = false;
+            } else {
+                submitHighScore.disabled = true;
+            }
+        })
+
+        highScoreDialog.show();
+
+        submitHighScore.addEventListener('click', () => {
+            const name = nameInput.value;
+            if(name && check.local){
+                localhighscores.push({name: name, score: this.score});
+                localhighscores.sort((f, s) => s.score - f.score);
+                localhighscores = localhighscores.slice(0, 10);
+                window.localStorage['highscores'] = JSON.stringify(localhighscores);
+            }
+    
+            if(name && check.global){
+                this.sendScore(name, this.score);
+            }
+            highScoreDialog.close();
+        })
 
         const highScoreSelector = document.getElementById('high-score-selector');
 

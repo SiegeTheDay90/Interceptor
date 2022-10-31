@@ -33,10 +33,17 @@
             <h3>Settings</h3>
             <div class='settings-controls'>
                 <h4>Control Type</h4>
-                <form action="" method="" id='control-type'>
-                    <input class="control-button" type="button" value="Mouse" disabled = "true"><br>
-                    <input class="control-button" type="button" value="Keyboard">
-                </form>
+                <div id='control-buttons'>
+                    <button value="mouse" class="control-button" disabled><i class="fa-solid fa-mouse"></i></button>
+                    <button value="keyboard" class="control-button"><i class="fa-solid fa-keyboard"></i></button>
+                </div>
+            </div>
+            <div class="settings-sound">
+                <h4>Sound</h4>
+                <div id='sound-buttons'>
+                    <button value="soundOn" class="sound-button" disabled><i class="fa-solid fa-volume-high" ></i></button>
+                    <button value="soundOff" class="sound-button"><i class="fa-solid fa-volume-xmark"></i></button>
+                </div>
             </div>
             <div class='settings-speed'>
                 <h4>Game Speed</h4>
@@ -48,11 +55,19 @@
             </div>
         </section>
 
-        <section><canvas style ='cursor: none; margin-top: 30px' id = "game-canvas"></canvas></section>    
+        <section id="canvas-section">
+            <canvas style ='cursor: none; margin-top: 30px' id = "game-canvas"></canvas>
+            <dialog id="high-score-dialog">
+                <p>Enter a name to submit your score!</p>
+                <input id="high-score-name" placeholder="Your Name Here" class="text-input"><br>
+                    <button id="submit-high-score" class="high-score-button">Submit!</button>
+                    <button  id="cancel-high-score" class="high-score-button">No Thanks</button>
+            </dialog>
+        </section>    
         
         <section class='right-container' style="margin-left: 30px">
             <h3>High Scores</h3>
-            <span id="high-scores-title">Local Leaderboard</span> &nbsp; <button id="high-score-selector" class="local">Show Global</button>
+            <span id="high-scores-title">Local Leaderboard</span><br> <button id="high-score-selector" class="local">Show Global</button>
 
             <div class="high-scores">
                 <ol id ='high-scores-list'>

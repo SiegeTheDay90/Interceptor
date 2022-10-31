@@ -55,10 +55,11 @@ addEventListener("DOMContentLoaded", () => {
     const gameContainer = document.getElementById('game-container');
     const speedButtons = document.getElementsByClassName('speed-button');
     const controlButtons = document.getElementsByClassName('control-button');
+    const soundButtons = document.getElementsByClassName('sound-button');
     const game = new Game(ctx);
     canvasEl.gameView = new GameView(game, ctx);
     
-    if(!window.localStorage['highscores']){
+    if(!window.localStorage['highscores'] || JSON.parse(window.localStorage['highscores']).length === 0){
         window.localStorage['highscores'] = JSON.stringify([{name: 'Good', score: 100}, {name: 'Luck', score: 90}, {name: 'Your', score: 80}, {name: 'Name', score: 70}, {name: 'Here', score: 60}]);
     };
 
@@ -102,20 +103,23 @@ addEventListener("DOMContentLoaded", () => {
 
     const clearScoresButton = document.getElementById('clear-high-scores');
 
-    clearScoresButton.addEventListener('click', (event) => {
+
+    let clearAlert;
+    const clearScores = ((event) => {
         if (event.target.value === "clear"){
-            event.target.value = "confirm";
-            event.target.classList.remove('clear-button');
-            event.target.classList.add('confirm-button');
-            event.target.innerText = "Click Again to Confirm";
-            this.clearAlert = setTimeout(() => {
+            clearTimeout(clearAlert);
+            clearAlert = setTimeout(() => {
                 event.target.value = "clear"; 
                 event.target.innerText = "Clear Local Scores";
                 event.target.classList.remove('confirm-button');
                 event.target.classList.add('clear-button');
             }, 5000);
+            event.target.value = "confirm";
+            event.target.classList.remove('clear-button');
+            event.target.classList.add('confirm-button');
+            event.target.innerText = "Click Again to Confirm";
         } else {
-            clearTimeout(this.clearAlert);
+            clearTimeout(clearAlert);
             event.target.classList.remove('confirm-button');
             event.target.classList.add('clear-button');
             event.target.value = "clear";
@@ -123,30 +127,54 @@ addEventListener("DOMContentLoaded", () => {
             window.localStorage['highscores'] = '[]';
             document.getElementById('high-scores-list').innerHTML = "";
         }
-    });
+    }).bind(this);
 
+    clearScoresButton.addEventListener('click', clearScores);
+
+    const cancelHighScore = document.getElementById('cancel-high-score');
+    cancelHighScore.addEventListener('click', function(){
+        const highScoreDialog = document.getElementById('high-score-dialog');
+        highScoreDialog.close();
+    })
+
+    const controlClick = function(event){
+        event.preventDefault();
+        if(event.currentTarget.value === "mouse"){
+            controlButtons[1].disabled = false;
+            controlButtons[0].disabled = true;
+            mouseControl = true;
+            keyboardControl = false;
+        }
+        if(event.currentTarget.value === "keyboard"){
+            game.cursor.pos = [canvasEl.width/2, canvasEl.height/2]
+            controlButtons[1].disabled = true;
+            controlButtons[0].disabled = false;
+            mouseControl = false;
+            keyboardControl = true;
+        }
+    }
+
+    const soundClick = function(event){
+        event.preventDefault();
+        if(event.currentTarget.value === "soundOn"){
+            soundButtons[1].disabled = false;
+            soundButtons[0].disabled = true;
+            canvasEl.gameView.game.soundOn = true;
+
+        }
+        if(event.currentTarget.value === "soundOff"){
+            soundButtons[1].disabled = true;
+            soundButtons[0].disabled = false;
+            canvasEl.gameView.game.soundOn = false;
+        }
+    }
+
+    Array.from(soundButtons).forEach((button) => {button.addEventListener('click', soundClick)});
 
 
     let mouseControl = true;
     let keyboardControl = false;
-    Array.from(controlButtons).forEach((button) => {
-        button.addEventListener('click', function(event){
-            if(event.target.value === "Mouse"){
-                controlButtons[1].disabled = false;
-                controlButtons[0].disabled = true;
-                mouseControl = true;
-                keyboardControl = false;
-            }
-            if(event.target.value === "Keyboard"){
-                game.cursor.pos = [canvasEl.width/2, canvasEl.height/2]
-                controlButtons[1].disabled = true;
-                controlButtons[0].disabled = false;
-                mouseControl = false;
-                keyboardControl = true;
-            }
-        })
-    });
-
+    Array.from(controlButtons).forEach((button) => { button.addEventListener('click', controlClick) });
     let speed = 1;
     Array.from(speedButtons).forEach((button) => {
         button.addEventListener('click', function(event){

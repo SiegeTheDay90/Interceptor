@@ -13,11 +13,41 @@ h1 {
 
 #game-container {
     background: #051821;
+    color: #266867;
     width: 100%;
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    color: #266867;
+}
+
+.text-input {
+    background: #0a3142;
+    color: #f58800;
+    margin: 10px;
+    border: 0px;
+}
+
+::placeholder {
+    color: #f587008c;
+}
+
+
+
+#high-score-dialog {
+    width: 225px;
+    font-size: 14px;
+    background: #051821;
+    color: #f58800;
+    border: 1px solid #266867;
+    border-radius: 8px;
+    position: absolute;
+    top: 15%;
+    text-align: center;
+
+}
+
+#canvas-section {
+    position: relative;
 }
 
 #game-canvas {
@@ -73,6 +103,7 @@ h3, h4 {
     font-size: 36px;
     padding: 5px 10px 5px 10px;
     color: #1A6665;
+    transition: 0.3s;
 }
 
 .contact-link:hover {
@@ -109,21 +140,40 @@ header {
     margin-bottom: 10px;
 }
 
-.speed-button, .display-button, .control-button {
+.speed-button, .display-button, .high-score-button {
     background-color: #1A4645;
     border-width: 0;
     width: 80px;
+    margin: 5px;
     color: inherit;
     cursor: pointer;
-    border-radius: 8px;
+    border-radius: 5px;
+}
+
+.control-button, .sound-button {
+    width: 40px;
+    height: 40px;
+    margin: 5px;
+    border-radius: 50%;
+    transition: 0.1s;
+    background-color: transparent;
+    color:#9B5C00;
+    font-size: 20px;
+    cursor: pointer;
 }
 
 
 
-.speed-button:disabled, .display-button:disabled, .control-button:disabled {
+
+.speed-button:disabled, .display-button:disabled, .control-button:disabled, .high-score-button:disabled {
     background-color: #053030;
     color: #BB7C00;
-    border-radius: 8px;
+}
+
+.control-button:disabled, .sound-button:disabled {
+    background-color: #BB7C00;
+    color: #053030;
+    border: 1px;
 }
 
 #speedometer {
@@ -145,6 +195,7 @@ header {
     color: #1A6665;
     font-weight: 900;
 }
+
 #high-scores-title {
     font-weight: bold;
 }
@@ -170,16 +221,22 @@ header {
     background-color: #1A4645;
     border-width: 0;
     width: 95px;
+    height: 40px;
     color: #BB7C00;
     cursor: pointer;
     border-radius: 8px;
     font-weight: 700;
 }
 
+.high-score-swap-button {
+    margin-left: 20px;
+}
+
 .confirm-button {
     color: #053030;
     background-color: #BB7C00;
-    width: 85px;
+    width: 95px;
+    height: 40px;
     cursor: pointer;
     border-radius: 8px;
     font-weight: 700;

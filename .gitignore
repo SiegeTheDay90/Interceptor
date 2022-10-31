@@ -1,5 +1,7 @@
 .gitignore
 /dist
+/node_modules
+package-lock.json
 Homepage.png
 Proposal.pdf
 reset.css
