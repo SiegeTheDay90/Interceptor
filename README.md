@@ -17,7 +17,7 @@ Interceptor can be played with mouse or keyboard controls as shown here.
 Interceptor is coded completely in vanilla Javascript. The game is drawn onto a canvas element and updated using the browser's requestAnimationFrame function. Additional functionality is added to buttons and other elements outside of the canvas by manipulating DOM objects with javascript.
 
 ## Feature Implementation
-### The highscore list is updated and stored using the `localStorage` property.
+### The highscore list is stored using the browser's `localStorage`.
 ```javascript     
 let highscores = JSON.parse(window.localStorage['highscores']);
 if((highscores.some((score) => this.score > score) || highscores.length<5) && this.score > 0){
