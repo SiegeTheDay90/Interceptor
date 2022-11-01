@@ -17,13 +17,44 @@ Interceptor can be played with mouse or keyboard controls as shown here.
 Interceptor is coded completely in vanilla Javascript. The game is drawn onto a canvas element and updated using the browser's requestAnimationFrame function. Additional functionality is added to buttons and other elements outside of the canvas by manipulating DOM objects with javascript.
 
 ## Feature Implementation
-### The highscore list is stored using the browser's `localStorage`.
+### The local leaderboard is stored using the browser's `localStorage`.
 ```javascript     
 let highscores = JSON.parse(window.localStorage['highscores']);
 if((highscores.some((score) => this.score > score) || highscores.length<5) && this.score > 0){
    this.ctx.fillStyle = ["#e5f800", "#eeff00", "#00ff00", "#ff4400", "#e39600"][Math.floor(Math.random()*5)];
    this.ctx.fillText("New High Score!", 230, 260);
 }
+```
+
+### The global leaderboard is stored and updated via a connection with Google's Firebase Firestore Database.
+```javascript
+    const firebaseConfig = {
+        apiKey: [filtered],
+        authDomain: [filtered],
+        projectId: [filtered],
+        storageBucket: [filtered],
+        messagingSenderId: [filtered],
+        appId: [filtered]
+    };
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+    
+    const sendScore = async function(name, highscore) {
+        await addDoc(collection(db, "scores"),{
+            name: name,
+            score: highscore
+        })
+    }
+        
+    const getScores = async function(){
+        let ref = collection(db,"scores");
+        const querySnapshot = await getDocs(ref);
+        let arr = [];
+        querySnapshot.forEach( (ele) => {
+            arr.push(ele.data());
+        })
+        return arr;
+    }
 ```
 ### The game speed can be changed to suit the player using buttons on the left of the play area.
 ```javascript
