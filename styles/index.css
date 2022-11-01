@@ -52,10 +52,8 @@ h1 {
 
 #game-canvas {
     border-radius: 25px;
-    height: 100%;
-    width: 100%;
     max-height: 500px;
-    max-width: 750px;
+    /* max-width: 45vw; */
     user-select: none;
     -moz-user-select: none;
     -webkit-user-select: none;
@@ -280,9 +278,25 @@ header {
 .instructions {
     border: 2px solid #BB7C00;
     border-radius: 8px;
-    padding: 10px;
+    padding: 8px;
+    height: 40px;
     max-width: 250px;
     max-height: 250px;
     margin-top: 10px;
-    font-size: 11px;
+    margin-bottom: 10px;
+    font-size: 12px;
+    overflow-y: hidden;
+    transition: 0.5s;
+}
+
+/* .instructions:hover {
+    height: 190px;
+} */
+
+#expand-instructions {
+    background-color: transparent;
+    border-width: 0;
+    color: #BB7C00;
+    cursor: pointer;
+    font-weight: 700;
 }

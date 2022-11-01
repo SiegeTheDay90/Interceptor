@@ -1,4 +1,3 @@
-// Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
 import { getDocs, getFirestore } from "firebase/firestore";
 import { collection, addDoc } from "firebase/firestore"; 
@@ -6,10 +5,7 @@ import { collection, addDoc } from "firebase/firestore";
 
 
 addEventListener("DOMContentLoaded", () => {
-    // TODO: Add SDKs for Firebase products that you want to use
-    // https://firebase.google.com/docs/web/setup#available-libraries
 
-    // Your web app's Firebase configuration
     const firebaseConfig = {
         apiKey: "AIzaSyC9IZALLfddiXJzq8A4ozM320XrkF4ypOM",
         authDomain: "interceptor-69b21.firebaseapp.com",
@@ -19,7 +15,6 @@ addEventListener("DOMContentLoaded", () => {
         appId: "1:104049209361:web:595773401aaa7933e3c1b0"
     };
     
-    // Initialize Firebase
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
  
@@ -56,8 +51,24 @@ addEventListener("DOMContentLoaded", () => {
     const speedButtons = document.getElementsByClassName('speed-button');
     const controlButtons = document.getElementsByClassName('control-button');
     const soundButtons = document.getElementsByClassName('sound-button');
+    const expandButton = document.getElementById('expand-instructions');
     const game = new Game(ctx);
     canvasEl.gameView = new GameView(game, ctx);
+
+    expandButton.addEventListener('click', (e) => {
+        e.preventDefault();
+        const instructions = document.getElementById('instructions');
+        debugger;
+        if (e.target.className === 'expand-button') {
+            instructions.style.height = "195px";
+            e.target.innerText = "See Less";
+            e.target.classList.replace("expand-button", "contract-button");
+        } else {
+            instructions.style.height = "40px";
+            e.target.innerText = "See More";
+            e.target.classList.replace("contract-button", "expand-button");
+        }        
+    });
     
     if(!window.localStorage['highscores'] || JSON.parse(window.localStorage['highscores']).length === 0){
         window.localStorage['highscores'] = JSON.stringify([{name: 'Good', score: 100}, {name: 'Luck', score: 90}, {name: 'Your', score: 80}, {name: 'Name', score: 70}, {name: 'Here', score: 60}]);
