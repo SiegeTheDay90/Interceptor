@@ -68,28 +68,41 @@ h3, h4 {
 }
 
 
-/* HUD Styles ----------------------------------------------------------------------- */
-.game-hud {
+/* Developer Card Styles ----------------------------------------------------------------------- */
+#dev-card-container {
+    box-sizing: border-box;
     background: #1A4645;
     width: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
+    padding-left: 1%;
     font-weight: bold;
     color: #f58800;
+    height: 20px;
+    font-size: 2vh;
+    transition: height 0.5s;
+    overflow-y: hidden;
 }
 
-#hud-score{
-    width: 200px;
-    text-align: left;
+.developer-card {
+    display: none;
+    height: 10px;
+    transition: 1s;
+    padding: 5px;
+    padding-left: 2%;
 }
 
-#hud-spacer {
-    width: 15%;
+#dev-card-container:hover .developer-card {
+    display: block;
+    height: 100%;
 }
-#hud-lives {
-    padding-left: 50px;
+
+#dev-card-container:hover {
+    height: 22vh;
+    content: none;
 }
+
 
 
 
