@@ -28,14 +28,6 @@ if((highscores.some((score) => this.score > score) || highscores.length<5) && th
 
 ### The global leaderboard is stored and updated via a connection with Google's Firebase Firestore Database.
 ```javascript
-    const firebaseConfig = {
-        apiKey: [filtered],
-        authDomain: [filtered],
-        projectId: [filtered],
-        storageBucket: [filtered],
-        messagingSenderId: [filtered],
-        appId: [filtered]
-    };
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
     
