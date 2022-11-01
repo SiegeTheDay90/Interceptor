@@ -279,6 +279,7 @@ header {
     border: 2px solid #BB7C00;
     border-radius: 8px;
     padding: 8px;
+    padding-top: 5px;
     height: 40px;
     max-width: 250px;
     max-height: 250px;
@@ -299,4 +300,18 @@ header {
     color: #BB7C00;
     cursor: pointer;
     font-weight: 700;
+}
+
+#expand-instructions {
+    font-size: 11px;
+    margin-left: 10px;
+}
+
+#expand-instructions:hover {
+    text-decoration: underline;
+}
+
+#instructions-heading {
+    display: inline-block;
+    margin-bottom: 0px;
 }
