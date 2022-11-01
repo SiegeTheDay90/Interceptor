@@ -56,9 +56,7 @@ GameView.prototype.animate = function(currentTime) {
 ```
 
 ## Features in Development
-* ### Global Scoreboard
-  * allows players to compete from anywhere
 * ### New Enemy Types
   * with clever and challenging behaviors
 * ### Variable Scroll Speed
-  * improve the feel of keyboard controls
+  * customize the feel of keyboard controls
