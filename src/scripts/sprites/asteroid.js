@@ -2,7 +2,7 @@ const MovingObject = require("./moving_object.js");
 const Explosion = require("./explosion.js");
 const Util = require("../util.js");
 
-const Enemy = function(options){
+const Asteroid = function(options){
 
     this.pos = options.pos;
     this.type = "enemy";
@@ -14,20 +14,18 @@ const Enemy = function(options){
     this.scoreValue = 10;
     this.angle = Math.random()*Math.PI
     this.angularMomentum = (Math.random()-0.5)*0.2
-    
-    
 }
 
-Util.inherits(Enemy, MovingObject);
+Util.inherits(Asteroid, MovingObject);
 
 
-Enemy.prototype.destroy = function(){
+Asteroid.prototype.destroy = function(){
     if (this.pos[1] < 395 && !this.game.over && this.game.started){this.game.score += 10};
     this.game.remove(this);
     this.game.explosions.push(new Explosion({game: this.game, pos: this.pos}));
 }
 
-Enemy.prototype.draw = function (ctx){
+Asteroid.prototype.draw = function (ctx){
 
     ctx.beginPath();
     ctx.moveTo(
@@ -65,7 +63,7 @@ Enemy.prototype.draw = function (ctx){
     
 }
 
-Enemy.prototype.move = function(delta){
+Asteroid.prototype.move = function(delta){
     MovingObject.prototype.move.call(this, delta*2.5);
     this.angle = (this.angle + this.angularMomentum)%(Math.PI*2)
     if(this.pos[1] > 495){
@@ -76,4 +74,4 @@ Enemy.prototype.move = function(delta){
 
 
 
-module.exports = Enemy;
+module.exports = Asteroid;

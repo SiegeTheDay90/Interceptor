@@ -25,14 +25,19 @@
 
 <body>
     <div id='game-container'>
-        <div id='dev-card-container'><p class="pulse">Developer Information</p>
+        <div id='dev-card-container'>
+            <p class="pulse">Developed by Clarence Smith</p>
+            
             <div class='developer-card'>
-                <div class='developer-card-right'>
-                    <p>Hi, my name is Clarence Smith, thanks for playing Interceptor! Here's a little about myself and the game:</p>
-                    <p>I'm a former educator with a passion for technology and software development. I have enjoyed developing with Ruby on Rails, React/Redux, Express, Node.js, Vanilla Javascript, HTML, CSS, and SQL. Interceptor was created from my love of retro browser games. There are currently four (4) distinct enemy types and I hope to add to the game in the future. I hope you also check out my full-stack projects!</p>
-                    <p>Interceptor runs in the browser using plain Javascript and DOM manipulation. The Global Leaderboard is maintained using a Google Firebase Firestore Database. The Local Leaderboard is stored using the browser's localStorage. Please send feedback to <span id="email"> ClarenceSmith90@gmail.com</span>.</p>
+                <img id="profile-pic" src="https://trnkt-dev.s3.amazonaws.com/ProfilePic.png" alt="developer"/>
+                <div class='dev-card-right'>
+                    <p>Hi, thanks for playing Interceptor! Here's a little about myself and the game:</p>
+                    <p>I'm a former educator with a passion for playing retro games. I created Interceptor to sharpen my DOM manipulation skills. I hope you also check out my full-stack projects! You can find them on my 
+                        <a href="https://siegetheday90.github.io/personal-site/" >portfolio site.</a></p>
+                    <p>The Global Leaderboard is maintained using a NoSQL Firestore Database. The Local Leaderboard is stored in the browser's localStorage. Please send feedback to <span id="email"> ClarenceSmith90@gmail.com</span></p>
                 </div>
             </div>
+
         </div>
 
         <section class='settings'>

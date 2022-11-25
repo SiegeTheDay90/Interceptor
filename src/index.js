@@ -58,7 +58,6 @@ addEventListener("DOMContentLoaded", () => {
     expandButton.addEventListener('click', (e) => {
         e.preventDefault();
         const instructions = document.getElementById('instructions');
-        debugger;
         if (e.target.className === 'expand-button') {
             instructions.style.height = "195px";
             e.target.innerText = "See Less";

@@ -1,4 +1,4 @@
-const Enemy = require("./enemy.js");
+const Asteroid = require("./asteroid.js");
 const Explosion = require("./explosion.js");
 const Util = require("../util.js");
 
@@ -15,7 +15,7 @@ const ZigZag = function(options){
     
 }
 
-Util.inherits(ZigZag, Enemy);
+Util.inherits(ZigZag, Asteroid);
 
 
 ZigZag.prototype.destroy = function(){
@@ -46,10 +46,7 @@ ZigZag.prototype.move = function(delta){
         this.vel = Util.angleTo(this, targetPos);
     }
 
-    Enemy.prototype.move.call(this, delta/0.95);
+    Asteroid.prototype.move.call(this, delta/0.95);
 }
-
-
-
 
 module.exports = ZigZag;

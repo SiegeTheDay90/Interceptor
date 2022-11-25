@@ -1,4 +1,4 @@
-const Enemy = require("./enemy.js");
+const Asteroid = require("./asteroid.js");
 const Missile = require("./missile.js");
 const Pop = require("./pop.js")
 const Util = require("../util.js");
@@ -14,12 +14,25 @@ const Teleporter = function(options){
     this.teleporting = false;
     this.canAttack = true;
     this.canTeleport = true;
+    this.spriteSheet = [];
+    for(let i =0; i < 6; i++){
+        this.spriteSheet.push(new Image());
+        this.spriteSheet[i].src = `images/saucer/saucer${i}.png`;
+    }
+    for(let i = 6; i > 0; i--){
+        this.spriteSheet.push(new Image());
+        this.spriteSheet[6+(6-i)].src = `images/saucer/saucer${i-1}.png`;
+    }
+    this.spriteStep = 0;
+    setInterval(() => {
+        this.spriteStep = (this.spriteStep+1)%10;
+    }, 50)
     this.teleport();
     
     
 }
 
-Util.inherits(Teleporter, Enemy);
+Util.inherits(Teleporter, Asteroid);
 
 
 Teleporter.prototype.destroy = function(){
@@ -32,17 +45,7 @@ Teleporter.prototype.destroy = function(){
 
 Teleporter.prototype.draw = function (ctx){
     if(!this.teleporting){
-        ctx.beginPath();
-        ctx.moveTo(this.pos[0], this.pos[1]+this.radius/2);
-        ctx.lineTo(this.pos[0]+this.radius*2, this.pos[1]);
-        ctx.lineTo(this.pos[0], this.pos[1]-this.radius/2);
-        ctx.lineTo(this.pos[0]-this.radius*2, this.pos[1]);
-        ctx.closePath();
-        ctx.strokeStyle = this.colors[Math.floor(Math.random()*5)];
-        ctx.lineWidth = 1;
-        ctx.stroke();
-        ctx.fillStyle = this.colors[Math.floor(Math.random()*5)]
-        ctx.fill();
+        ctx.drawImage(this.spriteSheet[this.spriteStep], this.pos[0]-22, this.pos[1]-7, 45, 15);
     } else if(this.teleporting){
         this.teleportStep += 2;
         if (this.teleportStep === 100){this.pos = [this.pos[0]+this.telediff[0], this.pos[1]+this.telediff[1]]}

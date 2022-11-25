@@ -1,4 +1,4 @@
-const Enemy = require("./enemy.js");
+const Asteroid = require("./asteroid.js");
 const Missile = require("./missile.js");
 const Pop = require("./pop.js")
 const Util = require("../util.js");
@@ -30,7 +30,7 @@ const Boss = function(options){
     
 }
 
-Util.inherits(Boss, Enemy);
+Util.inherits(Boss, Asteroid);
 
 
 Boss.prototype.destroy = function(){
@@ -124,7 +124,7 @@ Boss.prototype.move = function(delta){
     let makeAttack = Math.random();
 
     if(!this.teleporting && !this.canAttack){
-        Enemy.prototype.move.call(this, delta)
+        Asteroid.prototype.move.call(this, delta)
     }
 
     if (!this.teleporting && this.canTeleport && makeTeleport > 0.995){

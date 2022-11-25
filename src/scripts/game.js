@@ -1,4 +1,4 @@
-const Enemy = require("./sprites/enemy.js");
+const Asteroid = require("./sprites/asteroid.js");
 const ZigZag = require("./sprites/zigzag.js");
 const Teleporter = require("./sprites/teleporter.js");
 const Boss = require("./sprites/big_boss.js");
@@ -134,12 +134,12 @@ Game.prototype.addEnemy = function(enemyType){
                 let spawnPos = Util.spawn("enemy");
                 let targetPos = Util.chooseTarget(this);
                 let vel = Util.angleTo(spawnPos, targetPos);
-                this.enemies.push(new Enemy({game: this, vel: vel, pos: spawnPos}));
+                this.enemies.push(new Asteroid({game: this, vel: vel, pos: spawnPos}));
             }
             setTimeout(()=>{this.canSpawn = true}, 4000/(40/this.speed)/(this.intensity/3));
 
         } else {
-            this.enemies.push(new Enemy({game: this, vel: vel, pos: spawnPos}));
+            this.enemies.push(new Asteroid({game: this, vel: vel, pos: spawnPos}));
             setTimeout(()=>{this.canSpawn = true}, 700/(40/this.speed))
         }
     }
