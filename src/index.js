@@ -44,15 +44,15 @@ addEventListener("DOMContentLoaded", () => {
 
 
     const canvasEl = document.getElementById('game-canvas');
-    canvasEl.width = 750;
-    canvasEl.height = 500;
+    canvasEl.width = (window.innerWidth/2.25);
+    canvasEl.height = (window.innerHeight/1.25);
     let ctx = canvasEl.getContext('2d');
     const gameContainer = document.getElementById('game-container');
     const speedButtons = document.getElementsByClassName('speed-button');
     const controlButtons = document.getElementsByClassName('control-button');
     const soundButtons = document.getElementsByClassName('sound-button');
     const expandButton = document.getElementById('expand-instructions');
-    const game = new Game(ctx);
+    const game = new Game(ctx, canvasEl.width, canvasEl.height);
     canvasEl.gameView = new GameView(game, ctx);
 
     expandButton.addEventListener('click', (e) => {

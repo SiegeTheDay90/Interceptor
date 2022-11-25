@@ -6,11 +6,11 @@ const Util = {
         childClass.prototype.constructor = childClass;
     },
     
-    spawn: function spawn(type){
+    spawn: function spawn(type, width=750, height=500){
         type = type || "enemy";
         
         if (type === "enemy"){
-            return [Math.floor(Math.random()*771-10), Math.floor(Math.random()*-50-10)]
+            return [Math.floor(Math.random()*width-10), Math.floor(Math.random()*(height/-10)-10)]
         }
     },
 

@@ -8,8 +8,10 @@ const Cursor = require("./sprites/cursor.js");
 const Util = require("./util.js");
 const LargeExplosion = require("./sprites/large_explosion.js");
 
-const Game = function(ctx){
+const Game = function(ctx, width, height){
     this.ctx = ctx;
+    this.width = width;
+    this.height = height;
     this.soundOn = true;
     this.started = false;
     this.over = true;
@@ -40,10 +42,10 @@ Game.prototype.welcome = function(){
     this.canSpawn = true;
     this.intensity = 7;
     this.cities = [
-        new City({game: this, pos: [70, 475], destroyed: true}), 
-        new City({game: this, pos: [520, 475], destroyed: true}), 
-        new City({game: this, pos: [260, 475]}), 
-        new City({game: this, pos: [670, 475]})
+        new City({game: this, pos: [Math.ceil(this.width/10), Math.ceil(this.height/1.053)], destroyed: true}), 
+        new City({game: this, pos: [Math.ceil(this.width/1.44), Math.ceil(this.height/1.053)], destroyed: true}), 
+        new City({game: this, pos: [Math.ceil(this.width/2.88), Math.ceil(this.height/1.053)]}), 
+        new City({game: this, pos: [Math.ceil(this.width/1.12), Math.ceil(this.height/1.053)]})
     ];       
     this.over = false;
     this.started = false;
@@ -81,13 +83,12 @@ Game.prototype.setupGame = function(){
     }
     this.enemySpawnInterval(this.speed, this.intensity);
 
-    // this.enemies.push(new Boss({game: this, vel: [0, 0], pos: [Math.floor(Math.random()*600+100),-100]}))
     this.towers = [new Tower({game: this})];
     this.cities = [
-        new City({game: this, pos: [75, 475]}), 
-        new City({game: this, pos: [220, 475]}), 
-        new City({game: this, pos: [490, 475]}), 
-        new City({game: this, pos: [635, 475]}), 
+        new City({game: this, pos: [Math.ceil(this.width/10), Math.ceil(this.height/1.053)]}), 
+        new City({game: this, pos: [Math.ceil(this.width/3.41), Math.ceil(this.height/1.053)]}), 
+        new City({game: this, pos: [Math.ceil(this.width/1.53), Math.ceil(this.height/1.053)]}), 
+        new City({game: this, pos: [Math.ceil(this.width/1.18), Math.ceil(this.height/1.053)]}) 
     ];
 
     for(i=0; i < 3; i++){
@@ -111,27 +112,27 @@ Game.prototype.setupGame = function(){
 Game.prototype.addEnemy = function(enemyType){
   
     let targetPos = Util.chooseTarget(this);
-    let spawnPos = Util.spawn("enemy");
+    let spawnPos = Util.spawn("enemy", this.width, this.height);
     let vel = Util.angleTo(spawnPos, targetPos);
 
     enemyType = enemyType || Math.random() + this.intensity*0.03;
 
     if (this.intensity > 7 && this.bossSpawn){
         this.bossSpawn = false;
-        this.enemies.push(new Boss({game: this, vel: [0, 0], pos: [Math.floor(Math.random()*600+100),-100]}));
+        this.enemies.push(new Boss({game: this, vel: [0, 0], pos: [Math.floor((Math.random() + this.width/7)*this.width),-100]}));
         setTimeout(()=>{this.bossSpawn = true}, 60000/(40/this.speed));
     }
 
     if (this.canSpawn){
         this.canSpawn = false;
         if (enemyType > 0.85 && this.intensity > 6){
-            this.enemies.push(new Teleporter({game: this, vel: [0, 0], pos: [Math.floor(Math.random()*600+100),-100]}));
+            this.enemies.push(new Teleporter({game: this, vel: [0, 0], pos: [Math.floor((Math.random() + this.width/7)*this.width),-100]}));
             setTimeout(()=>{this.canSpawn = true}, 8000/(40/this.speed)/(this.intensity/7));
         }
         else if (enemyType > 0.60 && this.intensity > 2){
             this.enemies.push(new ZigZag({game: this, vel: vel, pos: spawnPos}));
             if(this.intensity > 4){
-                let spawnPos = Util.spawn("enemy");
+                let spawnPos = Util.spawn("enemy", this.width, this.height);
                 let targetPos = Util.chooseTarget(this);
                 let vel = Util.angleTo(spawnPos, targetPos);
                 this.enemies.push(new Asteroid({game: this, vel: vel, pos: spawnPos}));
@@ -178,7 +179,7 @@ Game.prototype.checkCollisions = function(){
         this.cities.forEach((city) => {
                 if (enemy.isCollidedWith(city) && city.destroyed === false){
                         enemy.destroy();
-                        this.explosions.push(new LargeExplosion({pos: [city.pos[0]+10, 500], game: this}))
+                        this.explosions.push(new LargeExplosion({pos: [city.pos[0]+10, this.height/1.053], game: this}))
                         setTimeout(() => {city.destroyed = true}, 650);
                     }
         })
@@ -186,13 +187,13 @@ Game.prototype.checkCollisions = function(){
 }
 
 Game.prototype.draw = function(){
-    this.ctx.clearRect(0,0, 750, 500);
+    this.ctx.clearRect(0,0, this.width, this.height);
     this.ctx.drawImage(this.nightsky, 0, -10);
-    this.ctx.drawImage(this.cityscape, 0, 500, 751, -161);
+    this.ctx.drawImage(this.cityscape, 0, this.height, this.width, -(this.height/4.66));
 
     if(this.started && !this.over){
         this.ctx.fillStyle = 'black';
-        Util.roundedRect(this.ctx, 570, 2, 160, 30, 10);
+        Util.roundedRect(this.ctx, this.width/1.32, 2, 160, 30, 10);
         this.ctx.font = "20px serif";
         if(this.intensity < 10){
             this.ctx.fillStyle = ["#00FF00","#44FF00","#66FF00","#AAFF00","#CCDD00","#DD9900","#DD5500","#EE4400","#EE1100","#FF0000"][this.intensity-1];
@@ -202,29 +203,29 @@ Game.prototype.draw = function(){
         this.ctx.fillText(`Danger Level: ${this.intensity}`, 585, 23);
 
         this.ctx.fillStyle = 'black';
-        Util.roundedRect(this.ctx, 20, 2, 160, 30, 10);
+        Util.roundedRect(this.ctx, this.width/37.5, 2, 160, 30, 10);
         this.ctx.font = "20px serif";
         this.ctx.fillStyle = "#f58800";
         this.ctx.fillText(`Score: ${this.score}`, 35, 23);
     }
 
     if(!this.started){
-        this.ctx.drawImage(this.logo, 170, -15, 393, 212);
+        this.ctx.drawImage(this.logo, this.width/4.41, this.height/-33.33, this.width/1.91, this.height/2.36);
         this.ctx.font = "24px serif";
         this.ctx.fillStyle = ["#f58800", "#f58800", "#f58800", "#ff4400", "#e37600"][Math.floor(Math.random()*5)];
-        this.ctx.fillText("Press Fire to Begin", 280, 240);
+        this.ctx.fillText("Press Fire to Begin", this.width/2.68, this.height/2.08);
 
-        this.ctx.drawImage(this.mc, 100, 260, 198, 135);
-        this.ctx.drawImage(this.kc, 400, 260, 198, 135);
+        this.ctx.drawImage(this.mc, this.width*(750/100), this.height*(500/260), this.width*(750/198), this.height*(500/135));
+        this.ctx.drawImage(this.kc,this.width*(750/400), this.height*(500/260), this.width*(750/198), this.height*(500/135));
     };
 
     if(this.over && this.started){
         this.ctx.font = "24px serif";
         this.ctx.fillStyle = ["#f58800", "#ff4400", "#ff4400", "#ff4400", "#e37600"][Math.floor(Math.random()*5)];
-        this.ctx.fillText("Game Over! Press Fire to try again.", 220, 220);
+        this.ctx.fillText("Game Over! Press Fire to try again.", this.width * (750/220), this.height * (500/220));
         if(this.newHighScore){
             this.ctx.fillStyle = ["#e5f800", "#eeff00", "#00ff00", "#ff4400", "#e39600"][Math.floor(Math.random()*5)];
-            this.ctx.fillText(`New High Score! ${this.score}`, 230, 260);
+            this.ctx.fillText(`New High Score! ${this.score}`, this.width(750/230), this.height(500/260));
         }
 
     };
