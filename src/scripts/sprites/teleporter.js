@@ -7,7 +7,7 @@ const Teleporter = function(options){
 
     this.pos = options.pos;
     this.type = "enemy";
-    this.radius = 10;
+    this.radius = 15;
     this.vel = options.vel || [1, 0];
     this.colors = ["#eeeeff", "#ddecff","#dbdbfb", "#bed9fd", "#b7b7f7"];
     this.game = options.game;
@@ -26,7 +26,7 @@ const Teleporter = function(options){
     this.spriteStep = 0;
     setInterval(() => {
         this.spriteStep = (this.spriteStep+1)%10;
-    }, 50)
+    }, 75)
     this.teleport();
     
     
@@ -45,7 +45,7 @@ Teleporter.prototype.destroy = function(){
 
 Teleporter.prototype.draw = function (ctx){
     if(!this.teleporting){
-        ctx.drawImage(this.spriteSheet[this.spriteStep], this.pos[0]-22, this.pos[1]-7, 45, 15);
+        ctx.drawImage(this.spriteSheet[this.spriteStep], this.pos[0]-22, this.pos[1]-7, 56, 28);
     } else if(this.teleporting){
         this.teleportStep += 2;
         if (this.teleportStep === 100){this.pos = [this.pos[0]+this.telediff[0], this.pos[1]+this.telediff[1]]}
