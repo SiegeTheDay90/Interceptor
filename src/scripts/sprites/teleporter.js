@@ -19,13 +19,9 @@ const Teleporter = function(options){
         this.spriteSheet.push(new Image());
         this.spriteSheet[i].src = `images/saucer/saucer${i}.png`;
     }
-    for(let i = 6; i > 0; i--){
-        this.spriteSheet.push(new Image());
-        this.spriteSheet[6+(6-i)].src = `images/saucer/saucer${i-1}.png`;
-    }
     this.spriteStep = 0;
     setInterval(() => {
-        this.spriteStep = (this.spriteStep+1)%10;
+        this.spriteStep = (this.spriteStep+1)%6;
     }, 75)
     this.teleport();
     

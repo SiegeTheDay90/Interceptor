@@ -24,7 +24,15 @@ const Boss = function(options){
         this.vel = this.moveDirs[this.moveDirIdx]
     }, 1500)
     this.moveDirIdx = 0;
-
+    this.spriteSheet = [];
+    for(let i =0; i < 6; i++){
+        this.spriteSheet.push(new Image());
+        this.spriteSheet[i].src = `images/boss/boss${i}.png`;
+    }
+    this.spriteStep = 0;
+    setInterval(() => {
+        this.spriteStep = (this.spriteStep+1)%6;
+    }, 75);
     this.teleport();
     
     
@@ -57,24 +65,7 @@ Boss.prototype.destroy = function(){
 
 Boss.prototype.draw = function (ctx){
     if(!this.teleporting){
-        ctx.beginPath();
-        ctx.moveTo(this.pos[0]-10, this.pos[1]+this.radius/3);
-        ctx.lineTo(this.pos[0]+10, this.pos[1]+this.radius/3);
-        ctx.lineTo(this.pos[0]+this.radius*1.5, this.pos[1]);
-        ctx.lineTo(this.pos[0]-10, this.pos[1]-this.radius/3);
-        ctx.lineTo(this.pos[0]+10, this.pos[1]-this.radius/3);
-        ctx.lineTo(this.pos[0]-this.radius*1.5, this.pos[1]);
-        ctx.closePath();
-        ctx.strokeStyle = this.colors[Math.floor(Math.random()*2)];
-        ctx.lineWidth = 2;
-        ctx.stroke();
-        this.colorIdx = (this.colorIdx + 1)%4
-        if(this.invincible){
-            ctx.fillStyle = this.hitColors[this.colorIdx]
-        } else {
-            ctx.fillStyle = this.colors[this.colorIdx]
-        }
-        ctx.fill();
+        ctx.drawImage(this.spriteSheet[this.spriteStep], this.pos[0]-60, this.pos[1]-30, 120, 60);
     } else if(this.teleporting){
         this.teleportStep += 3;
         if (this.teleportStep === 99){this.pos = [this.pos[0]+this.telediff[0], this.pos[1]+this.telediff[1]]}
@@ -106,7 +97,7 @@ Boss.prototype.draw = function (ctx){
 }
 
 Boss.prototype.teleport = function(){
-    this.telediff = [Math.floor(Math.random()*650 + 50) - this.pos[0], Math.floor(Math.random()*150 + 10) - this.pos[1]];
+    this.telediff = [Math.floor(Math.random()*this.game.width + 50) - this.pos[0], Math.floor(Math.random()*this.game.height + 10) - this.pos[1]];
     this.teleporting = true;
     this.canTeleport = false;
     this.teleportStep = 0;
