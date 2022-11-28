@@ -46,7 +46,7 @@ const Util = {
         try{
             targetPos = friendlies[Math.floor(Math.random()*friendlies.length)].pos;
         } catch {
-            targetPos = [375, 400];
+            targetPos = [Math.random()*375, 400];
         }
 
         return targetPos;

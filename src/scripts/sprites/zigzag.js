@@ -11,6 +11,7 @@ const ZigZag = function(options){
     this.colors = ["#FFa0a0", "#FF3030", "#FFFFFF"];
     this.game = options.game;
     this.canChangeDir = true;
+    this.detonateAt = options.detonateAt;
     
     
 }

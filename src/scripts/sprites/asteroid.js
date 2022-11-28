@@ -7,13 +7,14 @@ const Asteroid = function(options){
     this.pos = options.pos;
     this.type = "enemy";
     this.radius = 8;
-    this.vertexLengths = [Math.random()*0.2+0.9, Math.random()*0.2+0.9, Math.random()*0.2+0.9, Math.random()*0.2+0.9, Math.random()*0.2+0.9, Math.random()*0.2+0.9, Math.random()*0.2+0.9, Math.random()*0.2+0.9]
+    this.vertexLengths = [Math.random()*0.2+0.9, Math.random()*0.2+0.9, Math.random()*0.2+0.9, Math.random()*0.2+0.9, Math.random()*0.2+0.9, Math.random()*0.2+0.9, Math.random()*0.2+0.9, Math.random()*0.2+0.9];
     this.vel = options.vel;
     this.color = "#673311";
     this.game = options.game;
     this.scoreValue = 10;
-    this.angle = Math.random()*Math.PI
-    this.angularMomentum = (Math.random()-0.5)*0.2
+    this.angle = Math.random()*Math.PI;
+    this.angularMomentum = (Math.random()-0.5)*0.2;
+    this.detonateAt = options.detonateAt;
 }
 
 Util.inherits(Asteroid, MovingObject);
@@ -66,7 +67,7 @@ Asteroid.prototype.draw = function (ctx){
 Asteroid.prototype.move = function(delta){
     MovingObject.prototype.move.call(this, delta*2.5);
     this.angle = (this.angle + this.angularMomentum)%(Math.PI*2)
-    if(this.pos[1] > 495){
+    if(this.pos[1] > this.detonateAt){
         this.destroy();
     }
 }

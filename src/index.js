@@ -44,8 +44,8 @@ addEventListener("DOMContentLoaded", () => {
 
 
     const canvasEl = document.getElementById('game-canvas');
-    canvasEl.width = (window.innerWidth/2.25);
-    canvasEl.height = (window.innerHeight/1.25);
+    canvasEl.width = (window.innerWidth/2);
+    canvasEl.height = (window.innerHeight/1.492);
     let ctx = canvasEl.getContext('2d');
     const gameContainer = document.getElementById('game-container');
     const speedButtons = document.getElementsByClassName('speed-button');

@@ -130,18 +130,18 @@ Game.prototype.addEnemy = function(enemyType){
             setTimeout(()=>{this.canSpawn = true}, 8000/(40/this.speed)/(this.intensity/7));
         }
         else if (enemyType > 0.60 && this.intensity > 2){
-            this.enemies.push(new ZigZag({game: this, vel: vel, pos: spawnPos}));
+            this.enemies.push(new ZigZag({game: this, vel: vel, pos: spawnPos, detonateAt: this.height/1.01}));
             if(this.intensity > 4){
                 let spawnPos = Util.spawn("enemy", this.width, this.height);
                 let targetPos = Util.chooseTarget(this);
                 let vel = Util.angleTo(spawnPos, targetPos);
-                this.enemies.push(new Asteroid({game: this, vel: vel, pos: spawnPos}));
+                this.enemies.push(new Asteroid({game: this, vel: vel, pos: spawnPos, detonateAt: this.height/1.01}));
             }
             setTimeout(()=>{this.canSpawn = true}, 4000/(40/this.speed)/(this.intensity/3));
 
         } else {
-            this.enemies.push(new Asteroid({game: this, vel: vel, pos: spawnPos}));
-            setTimeout(()=>{this.canSpawn = true}, 700/(40/this.speed))
+            this.enemies.push(new Asteroid({game: this, vel: vel, pos: spawnPos, detonateAt: this.height/1.01}));
+            setTimeout(()=>{this.canSpawn = true}, 700/(40/this.speed));
         }
     }
 }
@@ -179,7 +179,7 @@ Game.prototype.checkCollisions = function(){
         this.cities.forEach((city) => {
                 if (enemy.isCollidedWith(city) && city.destroyed === false){
                         enemy.destroy();
-                        this.explosions.push(new LargeExplosion({pos: [city.pos[0]+10, this.height/1.053], game: this}))
+                        this.explosions.push(new LargeExplosion({pos: [city.pos[0]+10, this.height/1.01], game: this}))
                         setTimeout(() => {city.destroyed = true}, 650);
                     }
         })
