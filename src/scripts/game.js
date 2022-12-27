@@ -42,10 +42,10 @@ Game.prototype.welcome = function(){
     this.canSpawn = true;
     this.intensity = 7;
     this.cities = [
-        new City({game: this, pos: [Math.ceil(this.width/10), Math.ceil(this.height/1.053)], destroyed: true}), 
-        new City({game: this, pos: [Math.ceil(this.width/1.44), Math.ceil(this.height/1.053)], destroyed: true}), 
-        new City({game: this, pos: [Math.ceil(this.width/2.88), Math.ceil(this.height/1.053)]}), 
-        new City({game: this, pos: [Math.ceil(this.width/1.12), Math.ceil(this.height/1.053)]})
+        new City({game: this, pos: [Math.ceil(this.width/10), Math.ceil(this.height/0.99)], destroyed: true}), 
+        new City({game: this, pos: [Math.ceil(this.width/1.44), Math.ceil(this.height/0.99)], destroyed: true}), 
+        new City({game: this, pos: [Math.ceil(this.width/2.88), Math.ceil(this.height/0.99)]}), 
+        new City({game: this, pos: [Math.ceil(this.width/1.12), Math.ceil(this.height/0.99)]})
     ];       
     this.over = false;
     this.started = false;
@@ -83,12 +83,12 @@ Game.prototype.setupGame = function(){
     }
     this.enemySpawnInterval(this.speed, this.intensity);
 
-    this.towers = [new Tower({game: this})];
+    this.towers = [new Tower({game: this, pos: [375*this.width/750, this.height]})];
     this.cities = [
-        new City({game: this, pos: [Math.ceil(this.width/10), Math.ceil(this.height/1.053)]}), 
-        new City({game: this, pos: [Math.ceil(this.width/3.41), Math.ceil(this.height/1.053)]}), 
-        new City({game: this, pos: [Math.ceil(this.width/1.53), Math.ceil(this.height/1.053)]}), 
-        new City({game: this, pos: [Math.ceil(this.width/1.18), Math.ceil(this.height/1.053)]}) 
+        new City({game: this, pos: [Math.ceil(this.width/10), Math.ceil(this.height/0.99)]}), 
+        new City({game: this, pos: [Math.ceil(this.width/3.41), Math.ceil(this.height/0.99)]}), 
+        new City({game: this, pos: [Math.ceil(this.width/1.53), Math.ceil(this.height/0.99)]}), 
+        new City({game: this, pos: [Math.ceil(this.width/1.18), Math.ceil(this.height/0.99)]}) 
     ];
 
     for(i=0; i < 3; i++){
@@ -179,7 +179,7 @@ Game.prototype.checkCollisions = function(){
         this.cities.forEach((city) => {
                 if (enemy.isCollidedWith(city) && city.destroyed === false){
                         enemy.destroy();
-                        this.explosions.push(new LargeExplosion({pos: [city.pos[0]+10, this.height/1.01], game: this}))
+                        this.explosions.push(new LargeExplosion({pos: [city.pos[0]+10, this.height], game: this}))
                         setTimeout(() => {city.destroyed = true}, 650);
                     }
         })
@@ -193,20 +193,27 @@ Game.prototype.draw = function(){
 
     if(this.started && !this.over){
         this.ctx.fillStyle = 'black';
-        Util.roundedRect(this.ctx, this.width/1.32, 2, 160, 30, 10);
-        this.ctx.font = "20px serif";
+        Util.roundedRect(this.ctx, this.width-200*this.width/750, 5, 160*this.width/750, 30*this.height/500, 10);
+        if(this.width < 300){
+            this.ctx.font = "12px serif";
+        } else {
+            this.ctx.font = "16px serif";
+        }
         if(this.intensity < 10){
             this.ctx.fillStyle = ["#00FF00","#44FF00","#66FF00","#AAFF00","#CCDD00","#DD9900","#DD5500","#EE4400","#EE1100","#FF0000"][this.intensity-1];
         } else {
             this.ctx.fillStyle = ["#f51100", "#f51100", "#f50000", "#ff0000", "#e37600"][Math.floor(Math.random()*5)];
         }
-        this.ctx.fillText(`Danger Level: ${this.intensity}`, 585, 23);
+        this.ctx.fillText(`Danger Level: ${this.intensity}`, this.width-200*this.width/750, 30*this.height/500);
 
         this.ctx.fillStyle = 'black';
-        Util.roundedRect(this.ctx, this.width/37.5, 2, 160, 30, 10);
-        this.ctx.font = "20px serif";
-        this.ctx.fillStyle = "#f58800";
-        this.ctx.fillText(`Score: ${this.score}`, 35, 23);
+        Util.roundedRect(this.ctx, this.width/37.5, 5, 160*this.width/750, 30*this.height/500, 10);
+        if(this.width < 300){
+            this.ctx.font = "12px serif";
+        } else {
+            this.ctx.font = "16px serif";
+        }        this.ctx.fillStyle = "#f58800";
+        this.ctx.fillText(`Score: ${this.score}`, 35*this.width/750, 30*this.height/500);
     }
 
     if(!this.started){
@@ -225,7 +232,7 @@ Game.prototype.draw = function(){
         this.ctx.fillText("Game Over! Press Fire to try again.", this.width * (750/220), this.height * (500/220));
         if(this.newHighScore){
             this.ctx.fillStyle = ["#e5f800", "#eeff00", "#00ff00", "#ff4400", "#e39600"][Math.floor(Math.random()*5)];
-            this.ctx.fillText(`New High Score! ${this.score}`, this.width(750/230), this.height(500/260));
+            this.ctx.fillText(`New High Score! ${this.score}`, this.width*(750/230), this.height*(500/260));
         }
 
     };

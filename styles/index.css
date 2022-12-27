@@ -183,6 +183,56 @@ header {
 
 
 /* Settings Styles -------------------------------------------------------------------- */
+#portrait-block {
+    display: none;
+    z-index: 3;
+    background-color: #053030;
+    padding-top: 100px;
+    padding-left: 10px;
+    color: #BB7C00
+
+}
+@media screen and (orientation: portrait){
+    #portrait-block{
+        display: block;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+    }
+}
+@media (max-width: 1050px) {
+    .settings, .right-container {
+        height: 50px;
+        width: 75px;
+        margin: 20px;
+        overflow: hidden;
+        content: none;
+        transition: all 0.2s;
+        /* border: 2px solid #9B5C00; */
+        background-color: #1A4645;
+        border-radius: 12px;
+        padding: 0 5px 2px 5px;
+    }
+    .settings div, .right-container div {
+        display: none
+    }
+    .settings:hover, .right-container:hover {
+        height: unset;
+        width: 180px;
+        overflow: visible;
+        border: none;
+        padding: none;
+        background-color: transparent;
+    }
+    .settings:hover div, .right-container:hover div {
+        display: block;
+    }
+
+}
+
+
 .settings {
     color: #FBBC24;
     margin-left: 15px;

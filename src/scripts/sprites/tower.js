@@ -23,11 +23,11 @@ Tower.prototype.draw = function (ctx){
     let movefix = diffs[0] < 0 ? -1 : 1;
     ctx.beginPath();
     ctx.strokeStyle = "#a55f35";
-    ctx.moveTo(this.pos[0]-1, this.pos[1]-105);
-    ctx.lineTo(this.pos[0] + movefix*20*Math.cos(this.angle), this.pos[1]-105 + movefix*20*Math.sin(this.angle));
+    ctx.moveTo(this.pos[0]-1, this.pos[1]-105*this.game.height/500);
+    ctx.lineTo(this.pos[0] + movefix*20*Math.cos(this.angle), this.pos[1]-105*this.game.height/500 + movefix*20*Math.sin(this.angle));
     ctx.lineWidth = 5;
     ctx.stroke();
-    ctx.drawImage(this.sprite, this.pos[0]-37, this.pos[1], 75, -125);
+    ctx.drawImage(this.sprite, this.pos[0]-37*this.game.width/750, this.pos[1], 75*this.game.width/750, -125*this.game.height/500);
 }
 
 

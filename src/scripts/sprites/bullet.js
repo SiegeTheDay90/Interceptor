@@ -3,7 +3,7 @@ const Explosion = require("./explosion.js");
 const Util = require("../util.js");
 
 const Bullet = function(options){
-    this.pos = [375, 395];
+    this.pos = options.pos || [375, 395];
     this.radius = 1.5;
     this.game = options.game;
     this.terminus = options.terminus;
