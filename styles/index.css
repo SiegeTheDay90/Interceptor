@@ -181,6 +181,22 @@ header {
     color: #1A4645;
 }
 
+@media (max-width: 1050px){
+    .header-logo{
+        height: 30px;
+        width: 30px;
+    }
+
+    .contact-link {
+        font-size: 24px
+    }
+
+    header h1 {
+        font-size: 20px;
+        height: 40px;
+    }
+}
+
 
 /* Settings Styles -------------------------------------------------------------------- */
 #portrait-block {
