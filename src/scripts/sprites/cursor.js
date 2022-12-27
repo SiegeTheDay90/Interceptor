@@ -24,7 +24,7 @@ Cursor.prototype.draw = function(ctx){
 Cursor.prototype.fire = function(){
     if(this.game.started && this.canFire && this.pos[1] < 400){
         this.canFire = false;
-        this.game.bullets.push(new Bullet({game: this.game, terminus: this.pos}));
+        this.game.bullets.push(new Bullet({game: this.game, terminus: this.pos, pos: [375*this.game.width/750, 395*this.game.height/500]}));
         setTimeout(() => {this.canFire = true}, 700/(40/this.game.speed));
     }
     if(!this.game.started){

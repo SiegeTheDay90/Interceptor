@@ -18,9 +18,9 @@ Util.inherits(City, StationaryObject);
 
 City.prototype.draw = function (ctx){
     if(this.destroyed === false){
-        ctx.drawImage(this.sprite, this.pos[0]-35, 500, 96, -90);
+        ctx.drawImage(this.sprite, this.pos[0]-35, this.pos[1], 96*this.game.width/750, -90*this.game.height/500);
     } else {
-        ctx.drawImage(this.destroyedSprite, this.pos[0]-35, 500, 96, -90);
+        ctx.drawImage(this.destroyedSprite, this.pos[0]-35, this.pos[1], 96*this.game.width/750, -90*this.game.height/500);
     }
 }
 
