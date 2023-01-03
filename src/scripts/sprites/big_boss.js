@@ -8,12 +8,12 @@ const Boss = function(options){
     this.pos = options.pos;
     this.type = "enemy";
     this.hitPoints = 5;
-    this.radius = 30;
+    this.game = options.game;
+    this.radius = 30*this.game.height/500;
     this.vel = [0.4, 0.1];
     this.colors = ["#00905e","#00705e", "#00705e", "#00705e"];
     this.hitColors = ["#b0205e","#b0105e", "#c0305e", "#f0305e"];
     this.colorIdx = 0;
-    this.game = options.game;
     this.teleporting = false;
     this.canAttack = false;
     setTimeout(() => {
@@ -68,7 +68,7 @@ Boss.prototype.destroy = function(){
 
 Boss.prototype.draw = function (ctx){
     if(!this.teleporting){
-        ctx.drawImage(this.spriteSheet[this.spriteStep], this.pos[0]-60, this.pos[1]-30, 120, 60);
+        ctx.drawImage(this.spriteSheet[this.spriteStep], this.pos[0]-60, this.pos[1]-30, this.radius*4, this.radius*2);
     } else if(this.teleporting){
         this.teleportStep += 3;
         if (this.teleportStep === 99){this.pos = [this.pos[0]+this.telediff[0], this.pos[1]+this.telediff[1]]}

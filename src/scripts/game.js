@@ -46,6 +46,7 @@ Game.prototype.resize = function(previous_dimensions, new_dimensions){
         object.pos = [x*new_dimensions[0]/previous_dimensions[0], y*new_dimensions[1]/previous_dimensions[1]];
         if (object.vel) object.vel = [object.vel[0]*new_dimensions[0]/previous_dimensions[0], object.vel[1]*new_dimensions[1]/previous_dimensions[1]];
         if (object.detonateAt) object.detonateAt = this.height/1.01;
+        if (object.radius) object.radius *= new_dimensions[1]/previous_dimensions[1];
     });
 };
 
@@ -190,8 +191,8 @@ Game.prototype.checkCollisions = function(){
         this.cities.forEach((city) => {
                 if (enemy.isCollidedWith(city) && city.destroyed === false){
                         enemy.destroy();
-                        this.explosions.push(new LargeExplosion({pos: [city.pos[0]+10, this.height], game: this}))
-                        setTimeout(() => {city.destroyed = true}, 650);
+                        this.explosions.push(new LargeExplosion({city, pos: [city.pos[0]+10, this.height], game: this}))
+                        // setTimeout(() => {city.destroyed = true}, 650);
                     }
         })
     })
@@ -349,7 +350,5 @@ const buildHighScoreList = async function(type){
         highScoresList.appendChild(newLi);
     });
 }
-
-
 
 module.exports = Game;

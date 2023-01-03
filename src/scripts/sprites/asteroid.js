@@ -6,11 +6,11 @@ const Asteroid = function(options){
 
     this.pos = options.pos;
     this.type = "enemy";
-    this.radius = 8;
+    this.game = options.game;
+    this.radius = 8*this.game.height/500;
     this.vertexLengths = [Math.random()*0.2+0.9, Math.random()*0.2+0.9, Math.random()*0.2+0.9, Math.random()*0.2+0.9, Math.random()*0.2+0.9, Math.random()*0.2+0.9, Math.random()*0.2+0.9, Math.random()*0.2+0.9];
     this.vel = options.vel;
     this.color = "#673311";
-    this.game = options.game;
     this.scoreValue = 10;
     this.angle = Math.random()*Math.PI;
     this.angularMomentum = (Math.random()-0.5)*0.2;
