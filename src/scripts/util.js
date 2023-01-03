@@ -10,7 +10,7 @@ const Util = {
         type = type || "enemy";
         
         if (type === "enemy"){
-            return [Math.floor(Math.random()*width-10), Math.floor(Math.random()*(height/-10)-10)]
+            return [Math.floor(Math.random()*width), -20*Math.random()-10]
         }
     },
 

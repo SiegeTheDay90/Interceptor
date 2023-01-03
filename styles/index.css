@@ -116,16 +116,16 @@ h3, h4 {
     cursor: pointer;
 }
 
-#dev-card-container:hover .developer-card {
+/* #dev-card-container:hover .developer-card {
     display: flex;
     justify-content: space-around;
     height: 100%;
-}
+} */
 
-#dev-card-container:hover {
+/* #dev-card-container:hover {
     height: 30vh;
     content: none;
-}
+} */
 
 .pulse {
     animation-duration: 0.75s;

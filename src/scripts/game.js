@@ -192,7 +192,6 @@ Game.prototype.checkCollisions = function(){
                 if (enemy.isCollidedWith(city) && city.destroyed === false){
                         enemy.destroy();
                         this.explosions.push(new LargeExplosion({city, pos: [city.pos[0]+10, this.height], game: this}))
-                        // setTimeout(() => {city.destroyed = true}, 650);
                     }
         })
     })
@@ -230,21 +229,21 @@ Game.prototype.draw = function(){
 
     if(!this.started){
         this.ctx.drawImage(this.logo, this.width/4.41, this.height/-33.33, this.width/1.91, this.height/2.36);
-        this.ctx.font = "24px serif";
+        this.ctx.font = this.width < 600 ? "20px serif" : "24px serif";
         this.ctx.fillStyle = ["#f58800", "#f58800", "#f58800", "#ff4400", "#e37600"][Math.floor(Math.random()*5)];
-        this.ctx.fillText("Press Fire to Begin", this.width/2.68, this.height/2.08);
+        this.ctx.fillText("Press Fire to Begin", this.width/2.5, this.height/2);
 
         this.ctx.drawImage(this.mc, this.width*(750/100), this.height*(500/260), this.width*(750/198), this.height*(500/135));
         this.ctx.drawImage(this.kc,this.width*(750/400), this.height*(500/260), this.width*(750/198), this.height*(500/135));
     };
 
     if(this.over && this.started){
-        this.ctx.font = "24px serif";
+        this.ctx.font = this.width < 600 ? "20px serif" : "24px serif";
         this.ctx.fillStyle = ["#f58800", "#ff4400", "#ff4400", "#ff4400", "#e37600"][Math.floor(Math.random()*5)];
-        this.ctx.fillText("Game Over! Press Fire to try again.", 220*this.width/750, 250*this.height/500);
+        this.ctx.fillText("Press Fire to try again.", this.width/3.5, this.height/2.25);
         if(this.newHighScore){
             this.ctx.fillStyle = ["#e5f800", "#eeff00", "#00ff00", "#ff4400", "#e39600"][Math.floor(Math.random()*5)];
-            this.ctx.fillText(`New High Score! ${this.score}`, 220*this.width/750, 280*this.height/500);
+            this.ctx.fillText(`New High Score! ${this.score}`, this.width/3.5, this.height/1.80);
         }
 
     };
