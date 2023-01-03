@@ -199,8 +199,8 @@ Game.prototype.checkCollisions = function(){
 
 Game.prototype.draw = function(){
     this.ctx.clearRect(0,0, this.width, this.height);
-    this.ctx.drawImage(this.nightsky, 0, -10);
-    this.ctx.drawImage(this.cityscape, 0, this.height, this.width, -(this.height/4.66));
+    this.ctx.drawImage(this.nightsky, 0, -10, this.width, this.height);
+    this.ctx.drawImage(this.cityscape, 0, this.height, this.width, -(this.height/3));
 
     if(this.started && !this.over){
         this.ctx.fillStyle = 'black';
