@@ -44,6 +44,8 @@ Game.prototype.resize = function(previous_dimensions, new_dimensions){
     this.allObjects().forEach((object) => {
         const [x, y] = object.pos;
         object.pos = [x*new_dimensions[0]/previous_dimensions[0], y*new_dimensions[1]/previous_dimensions[1]];
+        if (object.vel) object.vel = [object.vel[0]*new_dimensions[0]/previous_dimensions[0], object.vel[1]*new_dimensions[1]/previous_dimensions[1]];
+        if (object.detonateAt) object.detonateAt = this.height/1.01;
     });
 };
 
@@ -236,7 +238,6 @@ Game.prototype.draw = function(){
     };
 
     if(this.over && this.started){
-        console.log("Game Over!");
         this.ctx.font = "24px serif";
         this.ctx.fillStyle = ["#f58800", "#ff4400", "#ff4400", "#ff4400", "#e37600"][Math.floor(Math.random()*5)];
         this.ctx.fillText("Game Over! Press Fire to try again.", 220*this.width/750, 250*this.height/500);
