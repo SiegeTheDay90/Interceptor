@@ -38,6 +38,15 @@ const Game = function(ctx, width, height){
     this.welcome();
 }
 
+Game.prototype.resize = function(previous_dimensions, new_dimensions){
+    [this.width, this.height] = new_dimensions;
+
+    this.allObjects().forEach((object) => {
+        const [x, y] = object.pos;
+        object.pos = [x*new_dimensions[0]/previous_dimensions[0], y*new_dimensions[1]/previous_dimensions[1]];
+    });
+};
+
 Game.prototype.welcome = function(){
     this.canSpawn = true;
     this.intensity = 7;
@@ -227,12 +236,13 @@ Game.prototype.draw = function(){
     };
 
     if(this.over && this.started){
+        console.log("Game Over!");
         this.ctx.font = "24px serif";
         this.ctx.fillStyle = ["#f58800", "#ff4400", "#ff4400", "#ff4400", "#e37600"][Math.floor(Math.random()*5)];
-        this.ctx.fillText("Game Over! Press Fire to try again.", this.width * (750/220), this.height * (500/220));
+        this.ctx.fillText("Game Over! Press Fire to try again.", 220*this.width/750, 250*this.height/500);
         if(this.newHighScore){
             this.ctx.fillStyle = ["#e5f800", "#eeff00", "#00ff00", "#ff4400", "#e39600"][Math.floor(Math.random()*5)];
-            this.ctx.fillText(`New High Score! ${this.score}`, this.width*(750/230), this.height*(500/260));
+            this.ctx.fillText(`New High Score! ${this.score}`, 220*this.width/750, 280*this.height/500);
         }
 
     };

@@ -24,8 +24,6 @@ const Teleporter = function(options){
         this.spriteStep = (this.spriteStep+1)%6;
     }, 75)
     this.teleport();
-    
-    
 }
 
 Util.inherits(Teleporter, Asteroid);
@@ -73,7 +71,7 @@ Teleporter.prototype.draw = function (ctx){
 }
 
 Teleporter.prototype.teleport = function(){
-    this.telediff = [Math.floor(Math.random()*650 + 50) - this.pos[0], Math.floor(Math.random()*150 + 10) - this.pos[1]];
+    this.telediff = [Math.floor(Math.random()*this.game.width) - this.pos[0], Math.floor(Math.random()*125 + 10) - this.pos[1]];
     this.teleporting = true;
     this.canTeleport = false;
     this.teleportStep = 0;

@@ -38,7 +38,12 @@ addEventListener("DOMContentLoaded", () => {
         return arr;
     }
 
-    
+    window.addEventListener('resize', () => {
+        canvasEl.width = Math.min(750, (window.innerWidth/2));
+        canvasEl.height = Math.min(500, (window.innerHeight/1.492));
+        game.resize([game.width, game.height], [canvasEl.width, canvasEl.height]); 
+    });
+
     const Game = require("./scripts/game.js");
     const GameView = require("./scripts/game_view.js");
 
@@ -70,7 +75,7 @@ addEventListener("DOMContentLoaded", () => {
     });
     
     if(!window.localStorage['highscores'] || JSON.parse(window.localStorage['highscores']).length === 0){
-        window.localStorage['highscores'] = JSON.stringify([{name: 'Good', score: 100}, {name: 'Luck', score: 90}, {name: 'Your', score: 80}, {name: 'Name', score: 70}, {name: 'Here', score: 60}]);
+        window.localStorage['highscores'] = JSON.stringify([{name: 'Good', score: 100}, {name: 'Luck!', score: 90}, {name: 'Your', score: 80}, {name: 'Name', score: 70}, {name: 'Here', score: 60}]);
     };
 
     const buildHighScoreList = async function(type){

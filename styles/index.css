@@ -208,7 +208,7 @@ header {
     color: #BB7C00
 
 }
-@media screen and (orientation: portrait){
+@media screen and (orientation: portrait) and (width <= 1000px){
     #portrait-block{
         display: block;
         position: fixed;
@@ -218,7 +218,10 @@ header {
         height: 100vh;
     }
 }
-@media (max-width: 1050px) {
+@media (width <= 1050px) {
+    #game-container {
+        justify-content: space-around;
+    }
     .settings, .right-container {
         height: 50px;
         width: 75px;

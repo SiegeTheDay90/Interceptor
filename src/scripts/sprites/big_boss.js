@@ -15,7 +15,10 @@ const Boss = function(options){
     this.colorIdx = 0;
     this.game = options.game;
     this.teleporting = false;
-    this.canAttack = true;
+    this.canAttack = false;
+    setTimeout(() => {
+        this.canAttack = true
+    }, 3000)
     this.canTeleport = true;
     this.invincible = false;
     this.moveDirs = [[0.4,0.1], [0.4,-0.1], [-0.4,-0.1], [-0.4,0.1]];
@@ -97,7 +100,7 @@ Boss.prototype.draw = function (ctx){
 }
 
 Boss.prototype.teleport = function(){
-    this.telediff = [Math.floor(Math.random()*this.game.width + 50) - this.pos[0], Math.floor(Math.random()*this.game.height + 10) - this.pos[1]];
+    this.telediff = [Math.floor(Math.random()*this.game.width) - this.pos[0], Math.floor(Math.random()*this.game.height/7 + 10) - this.pos[1]];
     this.teleporting = true;
     this.canTeleport = false;
     this.teleportStep = 0;
@@ -106,7 +109,7 @@ Boss.prototype.teleport = function(){
         sound.volume = 0.1;
         sound.play();
     }
-    setTimeout(() => {this.canTeleport = true}, 6000/(40/this.game.speed))
+    setTimeout(() => {this.canTeleport = true}, 7000/(40/this.game.speed))
 }
 
 Boss.prototype.move = function(delta){
@@ -131,8 +134,8 @@ Boss.prototype.attack = function(){
     if(this.canAttack){
         this.canAttack = false;
         let targetPos = Util.chooseTarget(this.game);
-        const types = ['line', 'spray', 'multi']
-        let type = types[Math.floor(Math.random()*3)]
+        const types = ['line', 'spray', 'multi', 'line', 'line']
+        let type = types[Math.floor(Math.random()*5)]
         switch(type){
             case 'line':
                 let vel = Util.angleTo(this, targetPos, 1.3);
