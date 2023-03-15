@@ -26,15 +26,15 @@ const Game = function(ctx, width, height){
     this.bossSpawn = true;
     this.cursor = new Cursor({game: this});
     this.logo = new Image();
-    this.logo.src = 'images/logo.png';
+    this.logo.src = './images/logo.png';
     this.mc = new Image();
-    this.mc.src = 'images/mousecontrols.png';
+    this.mc.src = './images/mousecontrols.png';
     this.kc = new Image();
-    this.kc.src = 'images/keyboardcontrols.png';
+    this.kc.src = './images/keyboardcontrols.png';
     this.cityscape = new Image();
-    this.cityscape.src = 'images/cityscape.png';
+    this.cityscape.src = './images/cityscape.png';
     this.nightsky = new Image();
-    this.nightsky.src = 'images/nightsky.png';
+    this.nightsky.src = './images/nightsky.png';
     this.welcome();
 }
 
@@ -226,15 +226,17 @@ Game.prototype.draw = function(){
         }        this.ctx.fillStyle = "#f58800";
         this.ctx.fillText(`Score: ${this.score}`, 35*this.width/750, 30*this.height/500);
     }
-
+    
     if(!this.started){
         this.ctx.drawImage(this.logo, this.width/4.41, this.height/-33.33, this.width/1.91, this.height/2.36);
         this.ctx.font = this.width < 600 ? "20px serif" : "24px serif";
         this.ctx.fillStyle = ["#f58800", "#f58800", "#f58800", "#ff4400", "#e37600"][Math.floor(Math.random()*5)];
         this.ctx.fillText("Press Fire to Begin", this.width/2.5, this.height/2);
-
-        this.ctx.drawImage(this.mc, this.width*(750/100), this.height*(500/260), this.width*(750/198), this.height*(500/135));
-        this.ctx.drawImage(this.kc,this.width*(750/400), this.height*(500/260), this.width*(750/198), this.height*(500/135));
+        this.ctx.drawImage(this.mc, this.width*(80/750), this.height*(260/500), this.width*(250/750), this.height*(160/500));
+        this.ctx.drawImage(this.kc,this.width*(400/750), this.height*(260/500), this.width*(250/750), this.height*(160/500));
+        // this.ctx.drawImage(this.mc, 10, 10, 10, 10);
+        // this.ctx.drawImage(this.kc, 10, 10, 10, 10);
+        debugger
     };
 
     if(this.over && this.started){
