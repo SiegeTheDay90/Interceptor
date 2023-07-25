@@ -1,10 +1,13 @@
 import { initializeApp } from "firebase/app";
 import { getDocs, getFirestore } from "firebase/firestore";
 import { collection, addDoc } from "firebase/firestore"; 
-
+import HitCounter from "./scripts/HitCounter";
 
 
 addEventListener("DOMContentLoaded", () => {
+
+    const counter = HitCounter();
+    counter.inc("Interceptor");
 
     const firebaseConfig = {
         apiKey: "AIzaSyC9IZALLfddiXJzq8A4ozM320XrkF4ypOM",
