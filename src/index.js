@@ -1,4 +1,4 @@
-import { initializeApp } from "firebase/app";
+import { initializeApp, getApps, getApp} from "firebase/app";
 import { getDocs, getFirestore } from "firebase/firestore";
 import { collection, addDoc } from "firebase/firestore"; 
 import HitCounter from "./scripts/HitCounter";
@@ -8,9 +8,8 @@ addEventListener("DOMContentLoaded", () => {
 
     const counter = HitCounter();
     counter.inc("Interceptor");
-
     const firebaseConfig = {
-        apiKey: "AIzaSyC9IZALLfddiXJzq8A4ozM320XrkF4ypOM",
+        _name: "Interceptor",
         authDomain: "interceptor-69b21.firebaseapp.com",
         projectId: "interceptor-69b21",
         storageBucket: "interceptor-69b21.appspot.com",
@@ -18,7 +17,8 @@ addEventListener("DOMContentLoaded", () => {
         appId: "1:104049209361:web:595773401aaa7933e3c1b0"
     };
     
-    const app = initializeApp(firebaseConfig);
+    debugger;
+    const app = initializeApp(firebaseConfig, "HighScores");
     const db = getFirestore(app);
  
     
