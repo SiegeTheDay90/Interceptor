@@ -27,6 +27,7 @@ export default function HitCounter(){
         setDoc(docRef, data).then(async ()=>{
             const logRef = await doc(db, "Logs", String(Date.now()));
             const data = navigator.userAgentData.toJSON();
+            data.app = counter_name;
             setDoc(logRef, data);
         })
         .catch((error) => console.error(error, "Send Error"));
