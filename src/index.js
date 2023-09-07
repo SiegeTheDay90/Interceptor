@@ -17,7 +17,6 @@ addEventListener("DOMContentLoaded", () => {
         appId: "1:104049209361:web:595773401aaa7933e3c1b0"
     };
     
-    debugger;
     const app = initializeApp(firebaseConfig, "HighScores");
     const db = getFirestore(app);
  

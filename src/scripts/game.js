@@ -23,6 +23,7 @@ const Game = function(ctx, width, height){
     this.towers = [];
     this.explosions = [];
     this.enemies = [];
+    this.intensityColors = ["#00FF00", "#22FF00", "#44FF00", "#AAFF00", "#FFFF00", "#FFDD00", "#FFAA00", "#FF7700", "#FF4400", "#FF0000"]
     this.bossSpawn = true;
     this.cursor = new Cursor({game: this});
     this.logo = new Image();
@@ -203,40 +204,31 @@ Game.prototype.draw = function(){
     this.ctx.drawImage(this.cityscape, 0, this.height, this.width, -(this.height/3));
 
     if(this.started && !this.over){
-        this.ctx.fillStyle = 'black';
-        Util.roundedRect(this.ctx, this.width-200*this.width/750, 5, 160*this.width/750, 30*this.height/500, 10);
-        if(this.width < 300){
-            this.ctx.font = "12px serif";
-        } else {
-            this.ctx.font = "16px serif";
-        }
-        if(this.intensity < 10){
-            this.ctx.fillStyle = ["#00FF00","#44FF00","#66FF00","#AAFF00","#CCDD00","#DD9900","#DD5500","#EE4400","#EE1100","#FF0000"][this.intensity-1];
-        } else {
-            this.ctx.fillStyle = ["#f51100", "#f51100", "#f50000", "#ff0000", "#e37600"][Math.floor(Math.random()*5)];
-        }
-        this.ctx.fillText(`Danger Level: ${this.intensity}`, this.width-200*this.width/750, 30*this.height/500);
+        // Set Fontsize
+        this.ctx.font = this.height < 400 ? "12px serif" : "16px serif"
 
+        // Intensity Bar Right
         this.ctx.fillStyle = 'black';
-        Util.roundedRect(this.ctx, this.width/37.5, 5, 160*this.width/750, 30*this.height/500, 10);
-        if(this.width < 300){
-            this.ctx.font = "12px serif";
-        } else {
-            this.ctx.font = "16px serif";
-        }        this.ctx.fillStyle = "#f58800";
-        this.ctx.fillText(`Score: ${this.score}`, 35*this.width/750, 30*this.height/500);
+        Util.roundedRect(this.ctx, this.width-200*this.width/750, 5*this.height/500, 160*this.width/750, 30*this.height/500, 10); // Black Bar
+        this.ctx.fillStyle = this.intensityColors[this.intensity-1] // Green to Red
+        Util.roundedRect(this.ctx, this.width-190*this.width/750, 10*this.height/500, 14*this.intensity*this.width/750, 20*this.height/500, 5);// Color Bar
+        this.ctx.fillText(`Intensity`, this.width-150*this.width/750, 50*this.height/500);// Caption
+
+
+        // Score Bar Left
+        this.ctx.fillStyle = 'black';
+        Util.roundedRect(this.ctx, this.width/37.5, 5*this.height/500, 160*this.width/750, 30*this.height/500, 10);    // Black Bar  
+        this.ctx.fillStyle = "#f58800";
+        this.ctx.fillText(`${this.score}`, 35*this.width/750, 25*this.height/500); // Score
     }
     
     if(!this.started){
         this.ctx.drawImage(this.logo, this.width/4.41, this.height/-33.33, this.width/1.91, this.height/2.36);
-        this.ctx.font = this.width < 600 ? "20px serif" : "24px serif";
+        this.ctx.font = this.height < 400 ? "20px serif" : "24px serif";
         this.ctx.fillStyle = ["#f58800", "#f58800", "#f58800", "#ff4400", "#e37600"][Math.floor(Math.random()*5)];
         this.ctx.fillText("Press Fire to Begin", this.width/2.5, this.height/2);
         this.ctx.drawImage(this.mc, this.width*(80/750), this.height*(260/500), this.width*(250/750), this.height*(160/500));
         this.ctx.drawImage(this.kc,this.width*(400/750), this.height*(260/500), this.width*(250/750), this.height*(160/500));
-        // this.ctx.drawImage(this.mc, 10, 10, 10, 10);
-        // this.ctx.drawImage(this.kc, 10, 10, 10, 10);
-        debugger
     };
 
     if(this.over && this.started){
