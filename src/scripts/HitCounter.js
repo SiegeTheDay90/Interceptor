@@ -17,28 +17,27 @@ export default function HitCounter(){
     HitCounter.getHits = async function(counter_name){
         const docRef = await doc(db, "Hits", counter_name);
         let fetchedDoc = await getDoc(docRef);
-        const data = fetchedDoc?.data() || {count: 0};
+        const data = fetchedDoc?.data() || {};
         return data;
     }
     
     // Increment existing or create new counter
-    // Create document containing userAgent data for this hit
     HitCounter.inc = async function inc(counter_name){
+        const date = new Date().toLocaleDateString().replaceAll("/", "-");
         const docRef = await doc(db, "Hits", counter_name);
         let fetchedDoc = await getDoc(docRef);
-        const data = fetchedDoc?.data() || {count: 0};
-        data.count += 1;
-        setDoc(docRef, data).then(async ()=>{
-            const logRef = await doc(db, "Logs", String(Date.now()));
-            const data = navigator.userAgentData.toJSON();
-            data.app = counter_name;
-            setDoc(logRef, data);
-        })
-        .catch((error) => console.error(error, "Send Error"));
+
+        const data = fetchedDoc?.data() || {};
+        data[date] ||= 0;
+        data[date] += 1;
+
+        setDoc(docRef, data)
+        .catch((error) => console.error(error, `Hit Counter Send Error for ${counter_name}`));
     }
 
     return HitCounter;
 }
+
 
 
 
